@@ -36,13 +36,13 @@
 ```
 src/
 ├── components/          # 通用组件
-├── views/              # 页面组件
+├── pages/              # 页面组件
 ├── hooks/              # 自定义 hooks
 ├── utils/              # 工具函数
 ├── types/              # TypeScript 类型定义
 ├── assets/             # 静态资源
 ├── styles/             # 样式文件
-└── services/           # API 服务
+└── api/           # API 服务
 ```
 
 ### 5. 错误处理
