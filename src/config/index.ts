@@ -22,4 +22,4 @@ export const DEV_CONFIG = {
   debug: import.meta.env.DEV,
   // 是否开启 mock 数据
   mock: import.meta.env.VITE_USE_MOCK === 'true',
-} 
+}
