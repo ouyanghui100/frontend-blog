@@ -1,13 +1,22 @@
 import React from 'react'
 import { Breadcrumb, Layout, Menu } from 'antd'
-
+import { frontedBlogApi } from '@/api'
+import { useUserStore } from '@/store/user'
 const { Header, Content, Footer } = Layout
 
 const items = Array.from({ length: 15 }).map((_, index) => ({
   key: index + 1,
   label: `nav ${index + 1}`,
 }))
+
 export const Test: React.FC = () => {
+  const { adminLogin } = useUserStore(state => state)
+  React.useEffect(() => {
+    frontedBlogApi.getTags().then(res => {
+      console.log(res)
+    })
+    adminLogin({ username: 'ouyanghui', password: 'keep2902897795' })
+  }, [])
   return (
     <Layout className='w-full h-full'>
       <Header style={{ display: 'flex', alignItems: 'center' }}>

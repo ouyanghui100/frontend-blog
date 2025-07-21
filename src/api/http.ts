@@ -17,10 +17,7 @@ export interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 }
 
 const createUrl = (path = '', obj = {}) => {
-  return path.replace(
-    /\{([^}]+)\}/g,
-    (_$0, $1) => (obj && obj[$1 as keyof typeof obj]) ?? ''
-  )
+  return path.replace(/\{([^}]+)\}/g, (_$0, $1) => (obj && obj[$1 as keyof typeof obj]) ?? '')
 }
 
 const noMessageCodeList: number[] = [
@@ -69,21 +66,20 @@ function createService() {
           filename: resFileName as string,
         }
       }
-      const code = apiData.status
+      const code = apiData.code
       if (code === undefined) {
         message.error('非本系统的接口')
         return Promise.reject(new Error('非本系统的接口'))
       }
       switch (code) {
-        case 0:
+        case 200:
           return apiData.data
         case 401:
           // Token 过期时，登出逻辑可在此补充
           // TODO: 处理登出逻辑
           return Promise.reject(apiData)
         default:
-          !noMessageCodeList.includes(code) &&
-            message.error(apiData.message || 'Error')
+          !noMessageCodeList.includes(code) && message.error(apiData.message || 'Error')
           return Promise.reject(apiData)
       }
     },

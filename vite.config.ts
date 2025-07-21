@@ -1,15 +1,14 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { createStyleImportPlugin } from 'vite-plugin-style-import';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { createStyleImportPlugin } from 'vite-plugin-style-import'
 import * as reactPlugin from 'vite-plugin-react'
 import { resolve } from 'path'
+const target = 'http://localhost:3000'
 
 // https://vite.dev/config/
 export default defineConfig({
   optimizeDeps: {
-    include: [
-      'react-is',
-    ]
+    include: ['react-is'],
   },
   plugins: [
     reactPlugin,
@@ -38,6 +37,26 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
-    }
-  }
-});
+    },
+  },
+  //配置代理跨域
+  server: {
+    host: '0.0.0.0',
+    port: 5173, //自定义端口
+    proxy: {
+      '/api': {
+        target,
+        ws: true,
+        changeOrigin: true,
+        rewrite: path => path,
+        secure: true,
+        // debug: true,
+        bypass: (req, res, options) => {
+          const proxyURL = options.target + options.rewrite!(req.url!)
+          console.log(proxyURL)
+          res!.setHeader('true-url', proxyURL)
+        },
+      },
+    },
+  },
+})
