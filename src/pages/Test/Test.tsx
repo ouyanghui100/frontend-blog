@@ -10,9 +10,9 @@ const items = Array.from({ length: 15 }).map((_, index) => ({
 }))
 
 export const Test: React.FC = () => {
-  const { adminLogin } = useUserStore(state => state)
+  const { adminLogin } = useUserStore((state) => state)
   React.useEffect(() => {
-    frontedBlogApi.getTags().then(res => {
+    frontedBlogApi.getTags().then((res) => {
       console.log(res)
     })
     adminLogin({ username: 'ouyanghui', password: 'keep2902897795' })

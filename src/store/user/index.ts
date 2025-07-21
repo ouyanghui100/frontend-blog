@@ -17,11 +17,11 @@ interface UserState {
 export const useUserStore = create<UserState>((set, get) => ({
   token: getToken() || '',
   userInfo: null,
-  setToken: token => {
+  setToken: (token) => {
     saveToken(token)
     set({ token })
   },
-  setUserInfo: user => {
+  setUserInfo: (user) => {
     set({ userInfo: user })
   },
   adminLogin: async (params: { username: string; password: string }) => {

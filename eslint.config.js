@@ -17,16 +17,16 @@ export default [
         ecmaVersion: 'latest',
         sourceType: 'module',
         ecmaFeatures: {
-          jsx: true
-        }
-      }
+          jsx: true,
+        },
+      },
     },
     plugins: {
       '@typescript-eslint': typescript,
       react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
-      prettier
+      prettier,
     },
     rules: {
       // TypeScript 规则
@@ -44,10 +44,7 @@ export default [
       'react/prop-types': 'off',
       'react/jsx-props-no-spreading': 'off',
       'react/require-default-props': 'off',
-      'react/jsx-filename-extension': [
-        'error',
-        { extensions: ['.jsx', '.tsx'] }
-      ],
+      'react/jsx-filename-extension': ['error', { extensions: ['.jsx', '.tsx'] }],
       'react/jsx-one-expression-per-line': 'off',
       'react/jsx-wrap-multilines': 'off',
 
@@ -56,12 +53,10 @@ export default [
       'react-hooks/exhaustive-deps': 'warn',
 
       // React Refresh 规则
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true }
-      ],
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
 
       // 通用规则
+      'arrow-parens': ['error', 'always'],
       'no-console': 'warn',
       'no-debugger': 'error',
       'no-unused-vars': 'off', // 使用 TypeScript 版本
@@ -71,17 +66,17 @@ export default [
       'prefer-template': 'error',
 
       // Prettier 规则
-      'prettier/prettier': 'error'
+      'prettier/prettier': 'error',
     },
     settings: {
       react: {
-        version: 'detect'
-      }
-    }
+        version: 'detect',
+      },
+    },
   },
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
-    ignores: ['dist/**', 'node_modules/**', '*.config.js', '*.config.ts']
+    ignores: ['dist/**', 'node_modules/**', '*.config.js', '*.config.ts'],
   },
-  prettierConfig
+  prettierConfig,
 ]
