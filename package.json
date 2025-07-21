@@ -14,15 +14,21 @@
   },
   "dependencies": {
     "@ant-design/icons": "^6.0.0",
+    "@types/node": "^24.0.15",
     "@types/react-router-dom": "^5.3.3",
     "antd": "^5.25.2",
+    "axios": "^1.10.0",
+    "lodash-es": "^4.17.21",
+    "path": "^0.12.7",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.0",
-    "tailwind": "^4.0.0"
+    "tailwind": "^4.0.0",
+    "vite-plugin-react": "^4.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
+    "@types/lodash-es": "^4.17.12",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
