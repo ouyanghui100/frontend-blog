@@ -20,6 +20,10 @@
 - 使用单引号 (') 而不是双引号 (")
 - 优先使用 async/await 而不是回调函数
 - 遵循《代码整洁之道》原则
+- 使用hooks直接使用React对象，不要使用import，例如：
+```
+const [state, setState] = React.useState(0)
+```
 
 ### 2. 组件规范
 - 组件命名使用大驼峰命名法：`MyComponent`
