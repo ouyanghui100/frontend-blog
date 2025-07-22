@@ -2,10 +2,8 @@ import { Layout } from 'antd'
 import { Outlet, useLocation } from 'react-router-dom'
 import LayoutMenu from './menu'
 import LayoutHeader from './header'
-// import { AppLogo } from '@/components/AppLogo'
 import './index.less'
 import { useTitle } from '@/hooks/useTitle'
-// import { useAppSelector } from '@/stores'
 import { useMenuStore } from '@/store/menu'
 
 export const BasicLayout = () => {
