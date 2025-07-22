@@ -31,12 +31,12 @@ export default [
     rules: {
       // TypeScript 规则
       '@typescript-eslint/no-unused-vars': 'error',
-      '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-non-null-assertion': 'warn',
       '@typescript-eslint/prefer-const': 'error',
       '@typescript-eslint/no-var-requires': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
 
       // React 规则
       'react/jsx-uses-react': 'off',

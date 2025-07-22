@@ -29,11 +29,6 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": [
-    "env.d.ts",
-    "src/**/*.ts",
-    "src/*.d.ts",
-    "src/*.tsx",
-  ],
+  "include": ["env.d.ts", "src/**/*.ts", "src/*.d.ts", "src/*.tsx"],
   "exclude": ["node_modules", "dist", "release", "build"]
 }

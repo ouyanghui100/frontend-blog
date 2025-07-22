@@ -15,6 +15,7 @@
   "dependencies": {
     "@ant-design/icons": "^6.0.0",
     "@ant-design/v5-patch-for-react-19": "^1.0.3",
+    "@loadable/component": "^5.16.7",
     "@types/node": "^24.0.15",
     "@types/react-router-dom": "^5.3.3",
     "antd": "^5.25.2",
