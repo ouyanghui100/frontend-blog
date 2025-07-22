@@ -60,6 +60,7 @@ export function transformRouteToMenu(routes: RouteObject[]) {
   return cloneDeep(list)
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function treeMap<T = any>(
   treeData: T[],
   opt: { children?: string; conversion: Fn }
@@ -71,6 +72,7 @@ export function treeMap<T = any>(
  * @description: Extract tree specified structure
  */
 export function treeMapEach(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any,
   { children = 'children', conversion }: { children?: string; conversion: Fn }
 ) {
