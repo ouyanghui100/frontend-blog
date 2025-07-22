@@ -19,7 +19,7 @@ export const BasicLayout = () => {
         width={210}
         trigger={null}
         collapsed={collapsed}
-        style={{ height: '100vh' }}
+        className="h-100vh"
       >
         <LayoutMenu />
       </Sider>

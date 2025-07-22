@@ -7,15 +7,8 @@ const LayoutHeader = () => {
   const { Header } = Layout
 
   return (
-    <Header
-      className="flex justify-between"
-      style={{
-        flexDirection: 'column',
-        height: 'auto',
-        background: '#fff',
-      }}
-    >
-      <div className="flex justify-between" style={{ padding: '0 12px' }}>
+    <Header className="bg-hex-fff flex h-auto flex-col justify-between">
+      <div className="px-12px flex justify-between py-0">
         <div className="flex items-center">
           <FoldTrigger />
           <Breadcrumb />

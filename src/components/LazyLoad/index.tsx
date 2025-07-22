@@ -8,15 +8,7 @@ const LazyLoad = (
 ) =>
   loadable(loader, {
     fallback: (
-      <Spin
-        size="large"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100%',
-        }}
-      />
+      <Spin size="large" className="flex h-full items-center justify-center" />
     ),
   })
 

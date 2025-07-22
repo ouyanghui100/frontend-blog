@@ -19,33 +19,24 @@ export const Test: React.FC = () => {
   }, [])
   return (
     <Layout className="h-full w-full">
-      <Header style={{ display: 'flex', alignItems: 'center' }}>
+      <Header className="flex items-center">
         <div className="demo-logo" />
         <Menu
           theme="dark"
           mode="horizontal"
           defaultSelectedKeys={['2']}
           items={items}
-          style={{ flex: 1, minWidth: 0 }}
+          className="min-w-0 flex-1"
         />
       </Header>
-      <Content style={{ padding: '0 48px' }}>
+      <Content className="px-48px">
         <Breadcrumb
-          style={{ margin: '16px 0' }}
+          className="mb-16px"
           items={[{ title: 'Home' }, { title: 'List' }, { title: 'App' }]}
         />
-        <div
-          style={{
-            // background: colorBgContainer,
-            minHeight: 280,
-            padding: 24,
-            // borderRadius: borderRadiusLG,
-          }}
-        >
-          Content
-        </div>
+        <div className="min-h-280px p-24px">Content</div>
       </Content>
-      <Footer style={{ textAlign: 'center' }}>
+      <Footer className="text-center">
         Ant Design ©{new Date().getFullYear()} Created by Ant UED
       </Footer>
     </Layout>

@@ -19,7 +19,7 @@ export default function LayoutBreadcrumb() {
       return {
         title: (
           <>
-            {icon && <SvgIcon name={icon} style={{ marginRight: 8 }} />}
+            {icon && <SvgIcon name={icon} className="mr-2" />}
             <span>{name}</span>
           </>
         ),
@@ -29,7 +29,7 @@ export default function LayoutBreadcrumb() {
   }, [pathname])
 
   return (
-    <div className="flex items-center" style={{ padding: '0 16px' }}>
+    <div className="px-16px flex items-center">
       <Breadcrumb items={breadcrumbs} />
     </div>
   )
