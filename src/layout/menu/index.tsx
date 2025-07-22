@@ -42,7 +42,7 @@ const LayoutMenu = (props: any) => {
   const addIcon = (icon?: string) => {
     if (!icon) return null
     return (
-      <span className='anticon'>
+      <span className="anticon">
         <SvgIcon name={icon} size={16} />
       </span>
     )
@@ -53,7 +53,14 @@ const LayoutMenu = (props: any) => {
       if (!item?.children?.length) {
         return list.push(getItem(item.name, item.path, addIcon(item.icon)))
       }
-      list.push(getItem(item.name, item.path, addIcon(item.icon), getMenuItem(item.children)))
+      list.push(
+        getItem(
+          item.name,
+          item.path,
+          addIcon(item.icon),
+          getMenuItem(item.children)
+        )
+      )
     })
     return list
   }
@@ -86,12 +93,12 @@ const LayoutMenu = (props: any) => {
   }
 
   return (
-    <div className='layout_menu'>
-      <Spin spinning={loading} tip='Loading...'>
+    <div className="layout_menu">
+      <Spin spinning={loading} tip="Loading...">
         <Menu
-          theme='dark'
-          mode='inline'
-          triggerSubMenuAction='click'
+          theme="dark"
+          mode="inline"
+          triggerSubMenuAction="click"
           inlineIndent={20}
           subMenuOpenDelay={0.2}
           openKeys={openKeys}

@@ -18,12 +18,12 @@ export const Test: React.FC = () => {
     adminLogin({ username: 'ouyanghui', password: 'keep2902897795' })
   }, [])
   return (
-    <Layout className='w-full h-full'>
+    <Layout className="h-full w-full">
       <Header style={{ display: 'flex', alignItems: 'center' }}>
-        <div className='demo-logo' />
+        <div className="demo-logo" />
         <Menu
-          theme='dark'
-          mode='horizontal'
+          theme="dark"
+          mode="horizontal"
           defaultSelectedKeys={['2']}
           items={items}
           style={{ flex: 1, minWidth: 0 }}

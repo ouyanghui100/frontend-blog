@@ -60,7 +60,10 @@ export function transformRouteToMenu(routes: RouteObject[]) {
   return cloneDeep(list)
 }
 
-export function treeMap<T = any>(treeData: T[], opt: { children?: string; conversion: Fn }): T[] {
+export function treeMap<T = any>(
+  treeData: T[],
+  opt: { children?: string; conversion: Fn }
+): T[] {
   return treeData.map((item) => treeMapEach(item, opt))
 }
 
@@ -71,7 +74,8 @@ export function treeMapEach(
   data: any,
   { children = 'children', conversion }: { children?: string; conversion: Fn }
 ) {
-  const haveChildren = Array.isArray(data[children]) && data[children].length > 0
+  const haveChildren =
+    Array.isArray(data[children]) && data[children].length > 0
   const conversionData = conversion(data) || {}
   if (haveChildren) {
     return {

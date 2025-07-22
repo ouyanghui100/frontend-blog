@@ -54,8 +54,8 @@ export default function UserDropdown() {
   }
 
   return (
-    <Dropdown menu={{ items, onClick }} placement='bottomRight' arrow>
-      <span className='flex-center' style={{ cursor: 'pointer' }}>
+    <Dropdown menu={{ items, onClick }} placement="bottomRight" arrow>
+      <span className="flex-center" style={{ cursor: 'pointer' }}>
         <img
           src={headerImg}
           style={{
@@ -63,7 +63,7 @@ export default function UserDropdown() {
             height: '24px',
             borderRadius: '50%',
           }}
-          alt=''
+          alt=""
         />
       </span>
     </Dropdown>

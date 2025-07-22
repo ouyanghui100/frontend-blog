@@ -14,13 +14,18 @@ export const BasicLayout = () => {
   const { collapsed } = useMenuStore()
 
   return (
-    <Layout className='flex w-full h-100vh overflow-x-hidden'>
-      <Sider width={210} trigger={null} collapsed={collapsed} style={{ height: '100vh' }}>
+    <Layout className="h-100vh flex w-full overflow-x-hidden">
+      <Sider
+        width={210}
+        trigger={null}
+        collapsed={collapsed}
+        style={{ height: '100vh' }}
+      >
         <LayoutMenu />
       </Sider>
       <Layout>
         <LayoutHeader />
-        <Layout id='mainCont'>
+        <Layout id="mainCont">
           <Content>
             <Outlet key={key} />
           </Content>

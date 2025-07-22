@@ -23,9 +23,9 @@ export default function SvgIcon({
 
   return (
     <svg
-      className={`inline-block align-[-0.15em] fill-current overflow-hidden${className ? ' ' + className : ''}`}
+      className={`inline-block fill-current align-[-0.15em] overflow-hidden${className ? ' ' + className : ''}`}
       style={iconStyle}
-      aria-hidden='true'
+      aria-hidden="true"
     >
       <use href={symbolId} />
     </svg>

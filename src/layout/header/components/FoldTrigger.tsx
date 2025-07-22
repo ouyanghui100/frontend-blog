@@ -6,13 +6,17 @@ export default function FoldTrigger() {
   const { collapsed, setCollapsed } = useMenuStore()
   return (
     <span
-      className={classNames('flex items-center cursor-pointer', { unfold: !collapsed })}
+      className={classNames('flex cursor-pointer items-center', {
+        unfold: !collapsed,
+      })}
       onClick={setCollapsed}
     >
       <SvgIcon
-        name='unfold'
+        name="unfold"
         size={20}
-        className={classNames('transition-transform', { '-scale-x-100': !collapsed })}
+        className={classNames('transition-transform', {
+          '-scale-x-100': !collapsed,
+        })}
       />
     </span>
   )
