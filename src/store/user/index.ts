@@ -9,7 +9,6 @@ interface UserState {
 }
 interface UserActions {
   setToken: (token: string) => void
-  setUserInfo: (user: User | null) => void
   adminLogin: (params: { username: string; password: string }) => Promise<void>
   guestAccess: () => Promise<void>
   logout: () => void
@@ -22,9 +21,6 @@ export const useUserStore = create<UserState & UserActions>((set) => ({
   setToken: (token) => {
     saveToken(token)
     set({ token })
-  },
-  setUserInfo: (user) => {
-    set({ userInfo: user })
   },
   adminLogin: async (params: { username: string; password: string }) => {
     const res = await frontedBlogApi.adminLogin(params)
