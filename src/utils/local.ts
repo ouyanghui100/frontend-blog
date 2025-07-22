@@ -12,3 +12,11 @@ export const setToken = (token: string): void => {
 export const removeToken = (): void => {
   localStorage.removeItem(TOKEN_KEY)
 }
+
+export const getCollapsed = (): boolean => {
+  return localStorage.getItem('collapsed') === 'true'
+}
+
+export const setCollapsed = (collapsed: boolean): void => {
+  localStorage.setItem('collapsed', collapsed.toString())
+}

@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import { createStyleImportPlugin } from 'vite-plugin-style-import'
 import * as reactPlugin from 'vite-plugin-react'
 import { resolve } from 'path'
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 const target = 'http://localhost:3000'
 
 // https://vite.dev/config/
@@ -18,9 +19,13 @@ export default defineConfig({
         {
           libraryName: 'antd',
           esModule: true,
-          resolveStyle: name => `antd/es/${name}/style/index`,
+          resolveStyle: (name) => `antd/es/${name}/style/index`,
         },
       ],
+    }),
+    createSvgIconsPlugin({
+      iconDirs: [resolve(process.cwd(), 'src/assets/icons')],
+      symbolId: 'icon-[dir]-[name]',
     }),
   ],
   css: {
@@ -36,7 +41,7 @@ export default defineConfig({
   base: './',
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'),
+      '@': resolve(__dirname, './src'),
     },
   },
   //配置代理跨域
@@ -48,7 +53,7 @@ export default defineConfig({
         target,
         ws: true,
         changeOrigin: true,
-        rewrite: path => path,
+        rewrite: (path) => path,
         secure: true,
         // debug: true,
         bypass: (req, res, options) => {
