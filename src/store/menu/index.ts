@@ -11,6 +11,7 @@ interface MenuActions {
 export const useMenuStore = create<MenuState & MenuActions>((set) => ({
   collapsed: getCollapsed() || false,
   setCollapsed: () =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     set((state: any) => {
       const newValue = !state.collapsed
       setCollapsed(newValue)

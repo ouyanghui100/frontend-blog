@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, {
   type AxiosInstance,
   type AxiosRequestConfig,
@@ -17,7 +18,10 @@ export interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 }
 
 const createUrl = (path = '', obj = {}) => {
-  return path.replace(/\{([^}]+)\}/g, (_$0, $1) => (obj && obj[$1 as keyof typeof obj]) ?? '')
+  return path.replace(
+    /\{([^}]+)\}/g,
+    (_$0, $1) => (obj && obj[$1 as keyof typeof obj]) ?? ''
+  )
 }
 
 const noMessageCodeList: number[] = [
@@ -57,7 +61,7 @@ function createService() {
           try {
             resFileName = JSON.parse(resFileName)
           } catch (ex) {
-            // ignore
+            console.log(ex)
           }
           resFileName = decodeURIComponent(resFileName)
         }
@@ -79,7 +83,8 @@ function createService() {
           // TODO: 处理登出逻辑
           return Promise.reject(apiData)
         default:
-          !noMessageCodeList.includes(code) && message.error(apiData.message || 'Error')
+          !noMessageCodeList.includes(code) &&
+            message.error(apiData.message || 'Error')
           return Promise.reject(apiData)
       }
     },

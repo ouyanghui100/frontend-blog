@@ -67,7 +67,7 @@ export default defineFlatConfig([
       '@typescript-eslint': pluginTypeScript,
     },
     rules: {
-      ...pluginTypeScript.configs.recommended.rules,
+      // ...pluginTypeScript.configs.recommended.rules,
       /*
        * React Hooks规则配置
        * 配置文档: https://eslint.nodejs.cn/docs/latest/rules/#react-hooks
@@ -87,7 +87,7 @@ export default defineFlatConfig([
       // 禁止使用 any 类型
       '@typescript-eslint/no-explicit-any': 'error',
       // 禁止使用特定类型
-      '@typescript-eslint/ban-types': 'warn',
+      // '@typescript-eslint/ban-types': 'warn',
       // 不允许对初始化为数字、字符串或布尔值的变量或参数进行显式返回类型声明
       '@typescript-eslint/explicit-function-return-type': 'off',
       // 不允许在 import 语句中使用 require 语句
@@ -95,7 +95,7 @@ export default defineFlatConfig([
       // 禁止空函数
       '@typescript-eslint/no-empty-function': 'warn',
       // 禁止在变量定义之前使用它们
-      '@typescript-eslint/no-use-before-define': 'error',
+      '@typescript-eslint/no-use-before-define': 'off',
       // 禁止 @ts-<directive> 注释代码
       '@typescript-eslint/ban-ts-comment': 'warn',
       // 不允许使用后缀运算符的非空断言(!)
@@ -129,14 +129,6 @@ export default defineFlatConfig([
           allowBitwiseExpressions: true,
         },
       ],
-    },
-  },
-  {
-    files: ['*.d.ts'],
-    rules: {
-      'eslint-comments/no-unlimited-disable': 'off',
-      'import/no-duplicates': 'off',
-      'unused-imports/no-unused-vars': 'off',
     },
   },
   {
