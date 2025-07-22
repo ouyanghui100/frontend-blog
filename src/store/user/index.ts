@@ -14,7 +14,7 @@ interface UserState {
   getProfile: () => Promise<User | null>
 }
 
-export const useUserStore = create<UserState>((set, get) => ({
+export const useUserStore = create<UserState>((set, _get) => ({
   token: getToken() || '',
   userInfo: null,
   setToken: (token) => {
