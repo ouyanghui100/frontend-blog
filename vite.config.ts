@@ -4,6 +4,7 @@ import { createStyleImportPlugin } from 'vite-plugin-style-import'
 import * as reactPlugin from 'vite-plugin-react'
 import { resolve } from 'path'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import tailwindcss from '@tailwindcss/vite'
 const target = 'http://localhost:3000'
 
 // https://vite.dev/config/
@@ -13,6 +14,7 @@ export default defineConfig({
   },
   plugins: [
     reactPlugin,
+    tailwindcss(),
     react(),
     createStyleImportPlugin({
       libs: [

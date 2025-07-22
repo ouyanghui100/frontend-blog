@@ -8,14 +8,14 @@ const LayoutHeader = () => {
 
   return (
     <Header
-      className="flex-between-h"
+      className="flex justify-between"
       style={{
         flexDirection: 'column',
         height: 'auto',
         background: '#fff',
       }}
     >
-      <div className="flex-between-h" style={{ padding: '0 12px' }}>
+      <div className="flex justify-between" style={{ padding: '0 12px' }}>
         <div className="flex items-center">
           <FoldTrigger />
           <Breadcrumb />
