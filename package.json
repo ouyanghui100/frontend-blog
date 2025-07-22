@@ -16,6 +16,7 @@
     "@ant-design/icons": "^6.0.0",
     "@ant-design/v5-patch-for-react-19": "^1.0.3",
     "@loadable/component": "^5.16.7",
+    "@types/loadable__component": "^5.13.9",
     "@types/node": "^24.0.15",
     "@types/react-router-dom": "^5.3.3",
     "ahooks": "^3.9.0",

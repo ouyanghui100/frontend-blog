@@ -6,6 +6,8 @@ import type { User } from '@/api/frontedBlogApi'
 interface UserState {
   token: string
   userInfo: User | null
+}
+interface UserActions {
   setToken: (token: string) => void
   setUserInfo: (user: User | null) => void
   adminLogin: (params: { username: string; password: string }) => Promise<void>
@@ -14,7 +16,7 @@ interface UserState {
   getProfile: () => Promise<User | null>
 }
 
-export const useUserStore = create<UserState>((set, _get) => ({
+export const useUserStore = create<UserState & UserActions>((set) => ({
   token: getToken() || '',
   userInfo: null,
   setToken: (token) => {

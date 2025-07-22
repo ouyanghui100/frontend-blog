@@ -64,7 +64,11 @@ export const getTagDetail = (id: number) =>
   })
 
 // 更新标签
-export const updateTag = (data: { id: number; name?: string; updatedAt?: string }) =>
+export const updateTag = (data: {
+  id: number
+  name?: string
+  updatedAt?: string
+}) =>
   http<Tag>({
     url: '/v1/tags',
     method: 'patch',
@@ -112,7 +116,11 @@ export const getCategoryDetail = (id: number) =>
   })
 
 // 更新分类
-export const updateCategory = (data: { id: number; name?: string; updatedAt?: string }) =>
+export const updateCategory = (data: {
+  id: number
+  name?: string
+  updatedAt?: string
+}) =>
   http<Category>({
     url: '/v1/categories',
     method: 'patch',

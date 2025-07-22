@@ -5,12 +5,15 @@ import SvgIcon from '@/components/SvgIcon'
 import React from 'react'
 
 export default function LayoutBreadcrumb() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [breadcrumbs, setBreadcrumbs] = React.useState<any[]>([])
   const { pathname } = useLocation()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getMenuList: any[] = []
 
   React.useEffect(() => {
     const matchRouteList = matchRoutes(getMenuList, pathname) || []
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const breadcrumbList = matchRouteList.map((item: any) => {
       const { name, icon = '' } = item?.route
       return {
@@ -26,7 +29,7 @@ export default function LayoutBreadcrumb() {
   }, [pathname])
 
   return (
-    <div className='flex-center-v' style={{ padding: '0 16px' }}>
+    <div className="flex items-center" style={{ padding: '0 16px' }}>
       <Breadcrumb items={breadcrumbs} />
     </div>
   )

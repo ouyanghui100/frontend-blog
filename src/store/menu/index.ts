@@ -1,7 +1,14 @@
 import { create } from 'zustand'
 import { getCollapsed, setCollapsed } from '@/utils/local'
 
-export const useMenuStore = create<any>((set, _get) => ({
+interface MenuState {
+  collapsed: boolean
+}
+interface MenuActions {
+  setCollapsed: () => void
+}
+
+export const useMenuStore = create<MenuState & MenuActions>((set) => ({
   collapsed: getCollapsed() || false,
   setCollapsed: () =>
     set((state: any) => {

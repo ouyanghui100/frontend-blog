@@ -1,82 +1,149 @@
-import js from '@eslint/js'
-import typescript from '@typescript-eslint/eslint-plugin'
-import typescriptParser from '@typescript-eslint/parser'
-import react from 'eslint-plugin-react'
+// 配置文档: https://eslint.nodejs.cn/
+import { defineFlatConfig } from 'eslint-define-config'
+import configPrettier from 'eslint-config-prettier'
+import pluginPrettier from 'eslint-plugin-prettier'
+import * as parserTypeScript from '@typescript-eslint/parser'
+import pluginTypeScript from '@typescript-eslint/eslint-plugin'
 import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import prettier from 'eslint-plugin-prettier'
-import prettierConfig from 'eslint-config-prettier'
+import js from '@eslint/js'
 
-export default [
-  js.configs.recommended,
+/** @type {import('eslint-define-config').FlatESLintConfig} */
+export default defineFlatConfig([
   {
-    files: ['**/*.{js,jsx,ts,tsx}'],
+    ...js.configs.recommended,
+    ignores: ['src/assets/**'],
+    plugins: {
+      prettier: pluginPrettier,
+    },
+    rules: {
+      ...configPrettier.rules,
+      ...pluginPrettier.configs.recommended.rules,
+      /*
+       * Eslint规则配置
+       * 配置文档: https://eslint.nodejs.cn/docs/latest/rules/
+       */
+      // 需要 let 或 const 而不是 var
+      'no-var': 'error',
+      // 禁止在定义变量之前使用变量
+      'no-use-before-define': 'off',
+      // 声明后永远不会重新分配的变量需要 const 声明
+      'prefer-const': 'error',
+      // 禁止不规则空格
+      'no-irregular-whitespace': 'error',
+      // 禁止使用 debugger
+      'no-debugger': 'error',
+      // 禁止未使用的变量
+      'no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
+      // 使用 prettier 插件
+      'prettier/prettier': [
+        'error',
+        {
+          endOfLine: 'auto',
+        },
+      ],
+    },
+  },
+  {
+    files: ['**/*.?([cm])ts', '**/*.?([cm])tsx'],
     languageOptions: {
-      parser: typescriptParser,
+      parser: parserTypeScript,
       parserOptions: {
-        ecmaVersion: 'latest',
+        ecmaVersion: 2020,
         sourceType: 'module',
+        jsxPragma: 'React',
         ecmaFeatures: {
           jsx: true,
         },
       },
     },
     plugins: {
-      '@typescript-eslint': typescript,
-      react,
       'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
-      prettier,
+      '@typescript-eslint': pluginTypeScript,
     },
     rules: {
-      // TypeScript 规则
-      '@typescript-eslint/no-unused-vars': 'error',
-      '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-non-null-assertion': 'warn',
-      '@typescript-eslint/prefer-const': 'error',
-      '@typescript-eslint/no-var-requires': 'error',
-      '@typescript-eslint/no-explicit-any': 'error',
-
-      // React 规则
-      'react/jsx-uses-react': 'off',
-      'react/react-in-jsx-scope': 'off',
-      'react/prop-types': 'off',
-      'react/jsx-props-no-spreading': 'off',
-      'react/require-default-props': 'off',
-      'react/jsx-filename-extension': ['error', { extensions: ['.jsx', '.tsx'] }],
-      'react/jsx-one-expression-per-line': 'off',
-      'react/jsx-wrap-multilines': 'off',
-
-      // React Hooks 规则
+      ...pluginTypeScript.configs.recommended.rules,
+      /*
+       * React Hooks规则配置
+       * 配置文档: https://eslint.nodejs.cn/docs/latest/rules/#react-hooks
+       */
+      // 强制 Hook 调用规则
       'react-hooks/rules-of-hooks': 'error',
+      // 检查 useEffect 的依赖项
       'react-hooks/exhaustive-deps': 'warn',
-
-      // React Refresh 规则
-      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-
-      // 通用规则
-      'arrow-parens': ['error', 'always'],
-      'no-console': 'warn',
-      'no-debugger': 'error',
-      'no-unused-vars': 'off', // 使用 TypeScript 版本
-      'prefer-const': 'error',
-      'no-var': 'error',
-      'object-shorthand': 'error',
-      'prefer-template': 'error',
-
-      // Prettier 规则
-      'prettier/prettier': 'error',
-    },
-    settings: {
-      react: {
-        version: 'detect',
-      },
+      /*
+       * TypeScript规则配置
+       * 配置文档: https://typescript-eslint.nodejs.cn/rules/)
+       */
+      // 根据参数、属性和变量的默认值或初始值推断其类型
+      '@typescript-eslint/no-inferrable-types': 'off',
+      // 禁止使用自定义 ts 模块和命名空间
+      '@typescript-eslint/no-namespace': 'off',
+      // 禁止使用 any 类型
+      '@typescript-eslint/no-explicit-any': 'error',
+      // 禁止使用特定类型
+      '@typescript-eslint/ban-types': 'warn',
+      // 不允许对初始化为数字、字符串或布尔值的变量或参数进行显式返回类型声明
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      // 不允许在 import 语句中使用 require 语句
+      '@typescript-eslint/no-var-requires': 'warn',
+      // 禁止空函数
+      '@typescript-eslint/no-empty-function': 'warn',
+      // 禁止在变量定义之前使用它们
+      '@typescript-eslint/no-use-before-define': 'error',
+      // 禁止 @ts-<directive> 注释代码
+      '@typescript-eslint/ban-ts-comment': 'warn',
+      // 不允许使用后缀运算符的非空断言(!)
+      '@typescript-eslint/no-non-null-assertion': 'warn',
+      // 要求导出函数和类的公共类方法的显式返回和参数类型
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
+      // 使用顶层 type 限定符进行导入
+      '@typescript-eslint/no-import-type-side-effects': 'error',
+      // 不允许在可选链表达式后使用非空断言
+      '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
+      // 禁止定义未使用的变量
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
+      // 允许在导入上指定 type 关键字
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        {
+          disallowTypeAnnotations: false,
+          fixStyle: 'inline-type-imports',
+        },
+      ],
+      // 允许枚举成员的值是多种不同类型的有效 js 表达式
+      '@typescript-eslint/prefer-literal-enum-member': [
+        'error',
+        {
+          allowBitwiseExpressions: true,
+        },
+      ],
     },
   },
   {
-    files: ['**/*.{js,jsx,ts,tsx}'],
-    ignores: ['dist/**', 'node_modules/**', '*.config.js', '*.config.ts'],
+    files: ['*.d.ts'],
+    rules: {
+      'eslint-comments/no-unlimited-disable': 'off',
+      'import/no-duplicates': 'off',
+      'unused-imports/no-unused-vars': 'off',
+    },
   },
-  prettierConfig,
-]
+  {
+    files: ['*.?([cm])js'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
+    },
+  },
+])

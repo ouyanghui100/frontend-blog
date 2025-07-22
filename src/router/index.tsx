@@ -1,8 +1,14 @@
-import { Navigate, createHashRouter, redirect } from 'react-router-dom'
+import {
+  //Navigate,
+  createHashRouter,
+  //redirect
+} from 'react-router-dom'
 import type { RouteObject } from './types'
 import { genFullPath } from './helpers'
 
-const metaRoutes = import.meta.glob('./routes/*.tsx', { eager: true }) as Recordable
+const metaRoutes = import.meta.glob('./routes/*.tsx', {
+  eager: true,
+}) as Recordable
 
 const routeList: RouteObject[] = []
 
