@@ -99,7 +99,7 @@ export default defineFlatConfig([
       // 禁止 @ts-<directive> 注释代码
       '@typescript-eslint/ban-ts-comment': 'warn',
       // 不允许使用后缀运算符的非空断言(!)
-      '@typescript-eslint/no-non-null-assertion': 'warn',
+      '@typescript-eslint/no-non-null-assertion': 'off',
       // 要求导出函数和类的公共类方法的显式返回和参数类型
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       // 使用顶层 type 限定符进行导入

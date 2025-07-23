@@ -25,6 +25,7 @@ const getItem = (
   } as MenuItem
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const LayoutMenu = (props: any) => {
   const { pathname } = useLocation()
   const { setMenuList: setMenuListAction } = props

@@ -1,10 +1,11 @@
 import {
-  //Navigate,
+  Navigate,
   createHashRouter,
   //redirect
 } from 'react-router-dom'
 import type { RouteObject } from './types'
 import { genFullPath } from './helpers'
+import LoginPage from '@/pages/Login'
 
 const metaRoutes = import.meta.glob('./routes/*.tsx', {
   eager: true,
@@ -17,29 +18,30 @@ Object.keys(metaRoutes).forEach((key) => {
   const moduleList = Array.isArray(module) ? [...module] : [module]
   genFullPath(moduleList)
   routeList.push(...moduleList)
+  console.log(`Loaded route from ${key}`, moduleList)
 })
 
 const rootRoutes: RouteObject[] = [
-  // {
-  //   path: '/',
-  //   name: 'Root',
-  //   element: <Navigate to='/home' />,
-  // },
-  // {
-  //   path: '/login',
-  //   name: 'Login',
-  //   element: <LoginPage />,
-  //   meta: {
-  //     title: '登录页',
-  //     key: 'login',
-  //   },
-  //   loader: () => {
-  //     if (getAuthCache<string>(TOKEN_KEY)) {
-  //       return redirect('/')
-  //     }
-  //     return null
-  //   },
-  // },
+  {
+    path: '/',
+    name: 'Root',
+    element: <Navigate to="/home" />,
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    element: <LoginPage />,
+    meta: {
+      title: '登录页',
+      key: 'login',
+    },
+    loader: () => {
+      // if (getAuthCache<string>(TOKEN_KEY)) {
+      //   return redirect('/')
+      // }
+      // return null
+    },
+  },
   // ...routeList,
   // {
   //   path: '*',

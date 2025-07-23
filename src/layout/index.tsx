@@ -2,7 +2,6 @@ import { Layout } from 'antd'
 import { Outlet, useLocation } from 'react-router-dom'
 import LayoutMenu from './menu'
 import LayoutHeader from './header'
-import './index.less'
 import { useTitle } from '@/hooks/useTitle'
 import { useMenuStore } from '@/store/menu'
 
