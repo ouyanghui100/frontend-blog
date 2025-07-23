@@ -3,7 +3,7 @@ module.exports = {
   corePlugins: {
     preflight: false, // 禁用默认样式
   },
-  content: ['./src/**/*.{js,ts,jsx,tsx}'],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {},
   },

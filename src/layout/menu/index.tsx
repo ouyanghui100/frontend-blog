@@ -79,6 +79,7 @@ const LayoutMenu = (props: any) => {
 
   useEffect(() => {
     getMenuList()
+    console.log('Menu initialized with:', menuList)
   }, [])
 
   const handleOpenChange: MenuProps['onOpenChange'] = (keys: string[]) => {
@@ -94,7 +95,7 @@ const LayoutMenu = (props: any) => {
   }
 
   return (
-    <div className="layout_menu">
+    <div>
       <Spin spinning={loading} tip="Loading...">
         <Menu
           theme="dark"

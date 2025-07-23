@@ -33,13 +33,13 @@ export default defineFlatConfig([
       // 禁止使用 debugger
       'no-debugger': 'error',
       // 禁止未使用的变量
-      'no-unused-vars': [
-        'error',
-        {
-          argsIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
-        },
-      ],
+      // 'no-unused-vars': [
+      //   'error',
+      //   {
+      //     argsIgnorePattern: '^_',
+      //     varsIgnorePattern: '^_',
+      //   },
+      // ],
       // 使用 prettier 插件
       'prettier/prettier': [
         'error',

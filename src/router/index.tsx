@@ -1,11 +1,9 @@
-import {
-  Navigate,
-  createHashRouter,
-  //redirect
-} from 'react-router-dom'
+import { Navigate, createHashRouter, redirect } from 'react-router-dom'
 import type { RouteObject } from './types'
 import { genFullPath } from './helpers'
 import LoginPage from '@/pages/Login'
+import { getToken } from '@/utils/local'
+import PageException from '@/pages/Exception'
 
 const metaRoutes = import.meta.glob('./routes/*.tsx', {
   eager: true,
@@ -18,7 +16,6 @@ Object.keys(metaRoutes).forEach((key) => {
   const moduleList = Array.isArray(module) ? [...module] : [module]
   genFullPath(moduleList)
   routeList.push(...moduleList)
-  console.log(`Loaded route from ${key}`, moduleList)
 })
 
 const rootRoutes: RouteObject[] = [
@@ -36,30 +33,24 @@ const rootRoutes: RouteObject[] = [
       key: 'login',
     },
     loader: () => {
-      // if (getAuthCache<string>(TOKEN_KEY)) {
-      //   return redirect('/')
-      // }
-      // return null
+      if (getToken()) {
+        return redirect('/')
+      }
+      return null
     },
   },
-  // ...routeList,
-  // {
-  //   path: '*',
-  //   name: 'RedirectTo',
-  //   element: <Navigate to='/404' />,
-  // },
-  // {
-  //   path: '/403',
-  //   name: 'PageNotAuth',
-  //   element: <PageException />,
-  //   loader: () => ({ status: ExceptionEnum.PAGE_NOT_ACCESS, withCard: false }),
-  // },
-  // {
-  //   path: '/404',
-  //   name: 'PageNotFound',
-  //   element: <PageException />,
-  //   loader: () => ({ status: ExceptionEnum.PAGE_NOT_FOUND, withCard: false }),
-  // },
+  ...routeList,
+  {
+    path: '*',
+    name: 'RedirectTo',
+    element: <Navigate to="/404" />,
+  },
+  {
+    path: '/404',
+    name: 'PageNotFound',
+    element: <PageException />,
+    loader: () => ({ status: 404, withCard: false }),
+  },
 ]
 
 export { routeList as basicRoutes }
