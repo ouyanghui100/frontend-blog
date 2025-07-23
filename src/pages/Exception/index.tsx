@@ -1,8 +1,6 @@
-import type { FC, ReactNode } from 'react'
-import { Result, Card, Button } from 'antd'
+import type { FC } from 'react'
+import { Result, Button } from 'antd'
 import { useNavigate, useLoaderData } from 'react-router-dom'
-import PageWrapper from '@/components/Page'
-import { RESULT_COMPO } from '@/settings/websiteSetting'
 import { ExceptionEnum } from '@/api'
 
 const subTitleMap = new Map([
@@ -24,24 +22,8 @@ const PageException: FC = () => {
     navigate('/home')
   }
 
-  const WithCard = ({ children }: { children: ReactNode }) => {
-    if (withCard) {
-      return (
-        <PageWrapper plugin={RESULT_COMPO}>
-          <Card bordered={false}>{children}</Card>
-        </PageWrapper>
-      )
-    } else {
-      return (
-        <div className="flex h-full w-full items-center justify-center">
-          {children}
-        </div>
-      )
-    }
-  }
-
   return (
-    <WithCard>
+    <div className="flex h-full w-full items-center justify-center">
       <Result
         status={status}
         title={status}
@@ -52,7 +34,7 @@ const PageException: FC = () => {
           </Button>
         }
       />
-    </WithCard>
+    </div>
   )
 }
 
