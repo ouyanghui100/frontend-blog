@@ -29,7 +29,7 @@ export default function LayoutBreadcrumb() {
   }, [pathname])
 
   return (
-    <div className="px-16px flex items-center">
+    <div className="flex items-center px-4">
       <Breadcrumb items={breadcrumbs} />
     </div>
   )

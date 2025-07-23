@@ -40,6 +40,13 @@ export default defineFlatConfig([
       //     varsIgnorePattern: '^_',
       //   },
       // ],
+      'react/self-closing-comp': [
+        'error',
+        {
+          component: true,
+          html: true,
+        },
+      ],
       // 使用 prettier 插件
       'prettier/prettier': [
         'error',

@@ -1,6 +1,10 @@
 import type { ModalFuncProps } from 'antd'
 import { Modal, message as Message } from 'antd'
-import { InfoCircleFilled, CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons'
+import {
+  InfoCircleFilled,
+  CheckCircleFilled,
+  CloseCircleFilled,
+} from '@ant-design/icons'
 import { isString } from './is'
 
 export interface ModalOptionsEx extends Omit<ModalFuncProps, 'iconType'> {
@@ -9,20 +13,23 @@ export interface ModalOptionsEx extends Omit<ModalFuncProps, 'iconType'> {
 
 function getIcon(iconType: string) {
   if (iconType === 'warning') {
-    return <InfoCircleFilled className='modal-icon-warning' />
+    return <InfoCircleFilled className="modal-icon-warning" />
   } else if (iconType === 'success') {
-    return <CheckCircleFilled className='modal-icon-success' />
+    return <CheckCircleFilled className="modal-icon-success" />
   } else if (iconType === 'info') {
-    return <InfoCircleFilled className='modal-icon-info' />
+    return <InfoCircleFilled className="modal-icon-info" />
   } else {
-    return <CloseCircleFilled className='modal-icon-error' />
+    return <CloseCircleFilled className="modal-icon-error" />
   }
 }
 
 function renderContent({ content }: Pick<ModalOptionsEx, 'content'>) {
   if (isString(content)) {
-    // @ts-ignore
-    return <div dangerouslySetInnerHTML={`<div>${content as string}</div>`}></div>
+    return (
+      <div
+        dangerouslySetInnerHTML={{ __html: `<div>${content as string}</div>` }}
+      />
+    )
   } else {
     return content
   }

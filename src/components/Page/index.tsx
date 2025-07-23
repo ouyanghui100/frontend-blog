@@ -21,8 +21,8 @@ const PageWrapper = (props: PageProp) => {
 
   return (
     <div className="h-full">
-      <div className="min-h-48px bg-hex-fff box-sizing-border mb-3 w-full px-6 py-4">
-        <div className="text-16px font-600 mb-1">
+      <div className="mb-3 box-border min-h-[48px] w-full bg-[#fff] px-6 py-4">
+        <div className="mb-1 text-[16px] font-[600]">
           <SvgIcon name="hints" size={18} />
           <span>{props.plugin?.name}</span>
         </div>

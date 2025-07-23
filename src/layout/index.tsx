@@ -13,12 +13,12 @@ export const BasicLayout = () => {
   const { collapsed } = useMenuStore()
 
   return (
-    <Layout className="h-100vh flex w-full overflow-x-hidden">
+    <Layout className="flex h-[100vh] w-full overflow-x-hidden">
       <Sider
         width={210}
         trigger={null}
         collapsed={collapsed}
-        className="h-100vh"
+        className="h-[100vh]"
       >
         <LayoutMenu />
       </Sider>
