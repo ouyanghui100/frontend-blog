@@ -12,10 +12,9 @@ const subTitleMap = new Map([
 const PageException: FC = () => {
   const navigate = useNavigate()
 
-  const { status, withCard } = useLoaderData() as {
+  const { status } = useLoaderData() as {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     status: any
-    withCard: boolean
   }
 
   const goHome = () => {
