@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useTitle as usePageTitle } from 'ahooks'
 import { searchRoute } from '@/utils/searchRoute'
 import { basicRoutes } from '@/router/index'
+import React from 'react'
 export function useTitle() {
-  const [pageTitle, setPageTitle] = useState('react-admin-design')
+  const [pageTitle, setPageTitle] = React.useState('博客后台管理')
   const { pathname } = useLocation()
 
-  useEffect(() => {
+  React.useEffect(() => {
     const currRoute = searchRoute(pathname, basicRoutes)
     setPageTitle(currRoute?.meta.title)
   }, [pathname])

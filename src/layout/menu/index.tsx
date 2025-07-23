@@ -1,5 +1,5 @@
 import type { MenuProps } from 'antd'
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Menu, Spin } from 'antd'
 import { getAsyncMenus } from '@/router/menus'
@@ -29,12 +29,12 @@ const getItem = (
 const LayoutMenu = (props: any) => {
   const { pathname } = useLocation()
   const { setMenuList: setMenuListAction } = props
-  const [loading, setLoading] = useState(false)
-  const [menuList, setMenuList] = useState<MenuItem[]>([])
-  const [openKeys, setOpenKeys] = useState<string[]>([])
-  const [selectedKeys, setSelectedKeys] = useState<string[]>([pathname])
+  const [loading, setLoading] = React.useState(false)
+  const [menuList, setMenuList] = React.useState<MenuItem[]>([])
+  const [openKeys, setOpenKeys] = React.useState<string[]>([])
+  const [selectedKeys, setSelectedKeys] = React.useState<string[]>([pathname])
 
-  useEffect(() => {
+  React.useEffect(() => {
     setSelectedKeys([pathname])
 
     setOpenKeys(getOpenKeys(pathname))
@@ -77,7 +77,7 @@ const LayoutMenu = (props: any) => {
     }
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     getMenuList()
     console.log('Menu initialized with:', menuList)
   }, [])
