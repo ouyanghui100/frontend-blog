@@ -18,6 +18,7 @@ export default defineFlatConfig([
     rules: {
       ...configPrettier.rules,
       ...pluginPrettier.configs.recommended.rules,
+      'prettier/prettier': 'error', // prettier 格式化
       /*
        * Eslint规则配置
        * 配置文档: https://eslint.nodejs.cn/docs/latest/rules/
@@ -32,26 +33,11 @@ export default defineFlatConfig([
       'no-irregular-whitespace': 'error',
       // 禁止使用 debugger
       'no-debugger': 'error',
-      // 禁止未使用的变量
-      // 'no-unused-vars': [
-      //   'error',
-      //   {
-      //     argsIgnorePattern: '^_',
-      //     varsIgnorePattern: '^_',
-      //   },
-      // ],
       'react/self-closing-comp': [
         'error',
         {
           component: true,
           html: true,
-        },
-      ],
-      // 使用 prettier 插件
-      'prettier/prettier': [
-        'error',
-        {
-          endOfLine: 'auto',
         },
       ],
     },

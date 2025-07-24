@@ -42,7 +42,7 @@ const LayoutMenu = (props: any) => {
   const addIcon = (icon?: string) => {
     if (!icon) return null
     return (
-      <span className="anticon">
+      <span>
         <SvgIcon name={icon} size={16} />
       </span>
     )
