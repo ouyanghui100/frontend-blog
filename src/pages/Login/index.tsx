@@ -1,6 +1,5 @@
 import React from 'react'
-import type { FormProps } from 'antd'
-import { Button, Form, Input } from 'antd'
+import { Button, Form, Input, message } from 'antd'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { frontedBlogApi } from '@/api'
 import { getToken, setToken } from '@/utils/local'
@@ -29,35 +28,20 @@ const LoginPage: React.FC = () => {
     const { accessToken } = await frontedBlogApi.guestAccess()
     setToken(accessToken)
     afterLoginAction(true)
+    message.success('登录成功')
   }
 
   const handleAdminLogin = async () => {
-    console.log('handleAdminLogin', form)
-    try {
-      const { password, username } = await form.validateFields()
-      const { accessToken } = await frontedBlogApi.adminLogin({
-        username,
-        password,
-      })
-      setToken(accessToken)
-      afterLoginAction(true)
-    } catch (errorInfo) {
-      console.log('校验失败：', errorInfo)
-    }
-    // const { accessToken } = await frontedBlogApi.adminLogin(values)
-    // setToken(accessToken)
-    // afterLoginAction(true)
+    const { password, username } = await form.validateFields()
+    const { accessToken } = await frontedBlogApi.adminLogin({
+      username,
+      password,
+    })
+    setToken(accessToken)
+    afterLoginAction(true)
+    message.success('登录成功')
   }
 
-  // const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-  //   console.log('Success:', values)
-  // }
-
-  // const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (
-  //   errorInfo
-  // ) => {
-  //   console.log('Failed:', errorInfo)
-  // }
   return (
     <div className="flex h-full w-full">
       <div className="flex h-full w-1/2 items-center justify-center bg-[#12538f] p-[40px] text-[70px] font-[700] text-[#fff]">
