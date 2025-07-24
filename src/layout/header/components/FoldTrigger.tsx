@@ -4,6 +4,7 @@ import { useMenuStore } from '@/store/menu'
 
 export default function FoldTrigger() {
   const { collapsed, setCollapsed } = useMenuStore()
+
   return (
     <span
       className={classNames('flex cursor-pointer items-center', {

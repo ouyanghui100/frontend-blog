@@ -61,7 +61,10 @@ const LoginPage: React.FC = () => {
             <Form.Item<FieldType>
               name="username"
               rules={[
-                { required: true, message: 'Please input your username!' },
+                {
+                  required: true,
+                  message: 'Please input your username!',
+                },
               ]}
             >
               <Input prefix={<UserOutlined />} />
@@ -70,7 +73,10 @@ const LoginPage: React.FC = () => {
             <Form.Item<FieldType>
               name="password"
               rules={[
-                { required: true, message: 'Please input your password!' },
+                {
+                  required: true,
+                  message: 'Please input your password!',
+                },
               ]}
             >
               <Input.Password prefix={<LockOutlined />} />

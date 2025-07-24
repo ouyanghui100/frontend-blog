@@ -3,6 +3,7 @@ import { useTitle as usePageTitle } from 'ahooks'
 import { searchRoute } from '@/utils/searchRoute'
 import { basicRoutes } from '@/router/index'
 import React from 'react'
+
 export function useTitle() {
   const [pageTitle, setPageTitle] = React.useState('博客后台管理')
   const { pathname } = useLocation()
