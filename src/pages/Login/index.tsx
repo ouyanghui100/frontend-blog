@@ -31,17 +31,33 @@ const LoginPage: React.FC = () => {
     afterLoginAction(true)
   }
 
-  // const handleAdminLogin = async (values: FieldType) => {
-
-  const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-    console.log('Success:', values)
+  const handleAdminLogin = async () => {
+    console.log('handleAdminLogin', form)
+    try {
+      const { password, username } = await form.validateFields()
+      const { accessToken } = await frontedBlogApi.adminLogin({
+        username,
+        password,
+      })
+      setToken(accessToken)
+      afterLoginAction(true)
+    } catch (errorInfo) {
+      console.log('校验失败：', errorInfo)
+    }
+    // const { accessToken } = await frontedBlogApi.adminLogin(values)
+    // setToken(accessToken)
+    // afterLoginAction(true)
   }
 
-  const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (
-    errorInfo
-  ) => {
-    console.log('Failed:', errorInfo)
-  }
+  // const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+  //   console.log('Success:', values)
+  // }
+
+  // const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (
+  //   errorInfo
+  // ) => {
+  //   console.log('Failed:', errorInfo)
+  // }
   return (
     <div className="flex h-full w-full">
       <div className="flex h-full w-1/2 items-center justify-center bg-[#12538f] p-[40px] text-[70px] font-[700] text-[#fff]">
@@ -54,8 +70,6 @@ const LoginPage: React.FC = () => {
             name="login-form"
             wrapperCol={{ span: 24 }}
             initialValues={{ remember: true }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
             <Form.Item<FieldType>
@@ -63,7 +77,7 @@ const LoginPage: React.FC = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please input your username!',
+                  message: '请输入用户名!',
                 },
               ]}
             >
@@ -75,7 +89,7 @@ const LoginPage: React.FC = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please input your password!',
+                  message: '请输入密码!',
                 },
               ]}
             >
@@ -86,7 +100,7 @@ const LoginPage: React.FC = () => {
             <Button type="primary" onClick={handleGuestAccess}>
               游客
             </Button>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" onClick={handleAdminLogin}>
               管理员
             </Button>
           </div>

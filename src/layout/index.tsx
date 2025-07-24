@@ -4,6 +4,7 @@ import LayoutMenu from './menu'
 import LayoutHeader from './header'
 import { useTitle } from '@/hooks/useTitle'
 import { useMenuStore } from '@/store/menu'
+import './index.scss'
 
 export const BasicLayout = () => {
   useTitle()
@@ -13,7 +14,7 @@ export const BasicLayout = () => {
   const { collapsed } = useMenuStore()
 
   return (
-    <Layout className="flex h-[100vh] w-full overflow-x-hidden">
+    <Layout className="layout_wrapper flex h-[100vh] w-full overflow-x-hidden">
       <Sider
         width={210}
         trigger={null}
