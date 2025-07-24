@@ -23,7 +23,7 @@ export default function SvgIcon({
 
   return (
     <svg
-      className={`inline-block fill-current align-[-0.15em] overflow-hidden${className ? ' ' + className : ''}`}
+      className={`inline-block overflow-hidden fill-current align-[-0.15em] ${className ? className : ''}`}
       style={iconStyle}
       aria-hidden="true"
     >

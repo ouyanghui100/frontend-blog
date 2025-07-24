@@ -6,6 +6,7 @@ import { getAsyncMenus } from '@/router/menus'
 import type { AppMenu } from '@/router/types'
 import { getOpenKeys } from '@/utils/helper'
 import SvgIcon from '@/components/SvgIcon'
+import { useMenuStore } from '@/store/menu'
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -25,10 +26,9 @@ const getItem = (
   } as MenuItem
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const LayoutMenu = (props: any) => {
+const LayoutMenu = () => {
   const { pathname } = useLocation()
-  const { setMenuList: setMenuListAction } = props
+  const setMenuListGlobal = useMenuStore((state) => state.setMenuList)
   const [loading, setLoading] = React.useState(false)
   const [menuList, setMenuList] = React.useState<MenuItem[]>([])
   const [openKeys, setOpenKeys] = React.useState<string[]>([])
@@ -69,8 +69,10 @@ const LayoutMenu = (props: any) => {
     setLoading(true)
     try {
       const menus = await getAsyncMenus()
+      console.log('222222222222222222', menus)
       setMenuList(getMenuItem(menus))
-      setMenuListAction(menus)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setMenuListGlobal(menus as any)
     } finally {
       setLoading(false)
     }
@@ -78,7 +80,6 @@ const LayoutMenu = (props: any) => {
 
   React.useEffect(() => {
     getMenuList()
-    console.log('Menu initialized with:', menuList)
   }, [])
 
   const handleOpenChange: MenuProps['onOpenChange'] = (keys: string[]) => {

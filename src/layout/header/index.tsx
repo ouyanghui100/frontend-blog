@@ -7,8 +7,8 @@ const LayoutHeader = () => {
   const { Header } = Layout
 
   return (
-    <Header className="flex h-auto flex-col justify-between bg-[#fff]">
-      <div className="flex justify-between px-3 py-0">
+    <Header className="flex h-auto flex-col justify-between !bg-[#fff]">
+      <div className="flex h-full justify-between px-3 py-0 w-full">
         <div className="flex items-center">
           <FoldTrigger />
           <Breadcrumb />
