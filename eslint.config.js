@@ -4,6 +4,7 @@ import configPrettier from 'eslint-config-prettier'
 import pluginPrettier from 'eslint-plugin-prettier'
 import * as parserTypeScript from '@typescript-eslint/parser'
 import pluginTypeScript from '@typescript-eslint/eslint-plugin'
+import pluginReact from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import js from '@eslint/js'
 
@@ -14,6 +15,7 @@ export default defineFlatConfig([
     ignores: ['src/assets/**'],
     plugins: {
       prettier: pluginPrettier,
+      react: pluginReact,
     },
     rules: {
       ...configPrettier.rules,

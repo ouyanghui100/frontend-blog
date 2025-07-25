@@ -1,8 +1,12 @@
-import { Row, Col, Card } from 'antd'
+import { Row, Col, Card, List, Button, Tooltip, message } from 'antd'
 import CountUpCard from './components/CountUpCard'
 import React from 'react'
 import ChartsCard from '@/components/ChartsCard'
 import type { EChartsOption } from 'echarts'
+import type { Category, Tag } from '@/api/frontedBlogApi'
+import { frontedBlogApi } from '@/api'
+import AddOrEditModal from './components/AddOrEditModal'
+import { messageBox } from '@/utils/messageBox'
 
 export const countUpData = [
   {
@@ -82,23 +86,130 @@ export const pieOptions: EChartsOption = {
 }
 
 const HomePage: React.FC = () => {
-  const [isLoading, setIsLoading] = React.useState(true)
+  const [isCategoriesLoading, setIsCategoriesLoading] = React.useState(true)
+  const [isTagsLoading, setIsTagsLoading] = React.useState(true)
 
-  setTimeout(() => {
-    setIsLoading(false)
-  }, 1500)
+  const [categoriesList, setCategoriesList] = React.useState<Category[]>([])
+  const [tagsList, setTagsList] = React.useState<Tag[]>([])
+
+  // 提取到组件作用域，供编辑/删除后调用
+  const fetchCategories = async () => {
+    try {
+      setIsCategoriesLoading(true)
+      const res = await frontedBlogApi.getCategories({})
+      setCategoriesList(res || [])
+      setIsCategoriesLoading(false)
+    } catch (error) {
+      console.log(error)
+      setIsCategoriesLoading(false)
+    }
+  }
+  const fetchTags = async () => {
+    try {
+      setIsTagsLoading(true)
+      const res = await frontedBlogApi.getTags({})
+      setTagsList(res || [])
+      setIsTagsLoading(false)
+    } catch (error) {
+      console.log(error)
+      setIsTagsLoading(false)
+    }
+  }
+
+  React.useEffect(() => {
+    fetchCategories()
+    fetchTags()
+  }, [])
+
+  // #region 编辑/新增
+  const [editModal, setEditModal] = React.useState<{
+    visible: boolean
+    type: 'category' | 'tag' | null
+    data: Category | Tag | null
+    isAdd?: boolean
+  }>({ visible: false, type: null, data: null, isAdd: false })
+  const [editLoading, setEditLoading] = React.useState(false)
+
+  // 编辑/新增弹窗提交
+  const handleEditSubmit = async (name: string) => {
+    setEditLoading(true)
+    try {
+      if (editModal.type === 'category') {
+        if (editModal.isAdd) {
+          await frontedBlogApi.createCategory({ name })
+          message.success('分类新增成功')
+          fetchCategories()
+        } else {
+          await frontedBlogApi.updateCategory({ id: editModal.data!.id, name })
+          message.success('分类编辑成功')
+          fetchCategories()
+        }
+      } else if (editModal.type === 'tag') {
+        if (editModal.isAdd) {
+          await frontedBlogApi.createTag({ name })
+          message.success('标签新增成功')
+          fetchTags()
+        } else {
+          await frontedBlogApi.updateTag({ id: editModal.data!.id, name })
+          message.success('标签编辑成功')
+          fetchTags()
+        }
+      }
+      setEditModal({ visible: false, type: null, data: null, isAdd: false })
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setEditLoading(false)
+    }
+  }
+  // #endregion
+
+  // #region 删除
+  const [deleteLoading, setDeleteLoading] = React.useState<{
+    type: 'category' | 'tag'
+    id: number
+  } | null>(null)
+
+  // 删除逻辑
+  const handleDelete = (type: 'category' | 'tag', id: number) => {
+    const { createConfirm } = messageBox()
+    createConfirm({
+      title: `确定要删除该${type === 'category' ? '分类' : '标签'}吗？`,
+      content: '删除后不可恢复，是否继续？',
+      iconType: 'warning',
+      onOk: async () => {
+        setDeleteLoading({ type, id })
+        try {
+          if (type === 'category') {
+            await frontedBlogApi.deleteCategory({ id })
+            message.success('分类删除成功')
+            fetchCategories()
+          } else {
+            await frontedBlogApi.deleteTag({ id })
+            message.success('标签删除成功')
+            fetchTags()
+          }
+        } catch (err) {
+          console.log(err)
+        } finally {
+          setDeleteLoading(null)
+        }
+      },
+    })
+  }
+  // #endregion
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-3">
-      <Row gutter={12}>
+      <Row gutter={[12, 12]}>
         {countUpData.map((item) => (
           <Col flex={1} key={item.title}>
             <CountUpCard
-              loading={isLoading}
               title={item.title}
               color={item.color}
               iconName={item.icon}
               countNum={item.count}
+              loading={false}
             />
           </Col>
         ))}
@@ -106,11 +217,7 @@ const HomePage: React.FC = () => {
       <div className="flex-1">
         <Row gutter={12} style={{ height: '100%' }}>
           <Col span={12}>
-            <ChartsCard
-              loading={isLoading}
-              options={pieOptions}
-              height="100%"
-            />
+            <ChartsCard options={pieOptions} height="100%" loading={false} />
           </Col>
           <Col span={6}>
             <Card
@@ -121,12 +228,181 @@ const HomePage: React.FC = () => {
                 },
               }}
             >
-              <p className="text-[20px] font-[600]">分类</p>
+              <div className="flex h-full w-full flex-col gap-1">
+                <div className="flex justify-between">
+                  <span className="text-[20px] font-[600]">分类</span>
+                  <Button
+                    type="primary"
+                    onClick={() =>
+                      setEditModal({
+                        visible: true,
+                        type: 'category',
+                        data: null,
+                        isAdd: true,
+                      })
+                    }
+                  >
+                    新增
+                  </Button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto">
+                  <List
+                    loading={isCategoriesLoading}
+                    itemLayout="horizontal"
+                    dataSource={categoriesList}
+                    renderItem={(item, _index) => (
+                      <List.Item>
+                        <List.Item.Meta
+                          avatar={
+                            <Tooltip title="文章总数">
+                              <div className="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-black">
+                                {item.articleCount}
+                              </div>
+                            </Tooltip>
+                          }
+                          title={
+                            <div className="flex items-center justify-between">
+                              <div>{item.name}</div>
+                              <div className="flex items-center gap-1">
+                                <Button
+                                  color="primary"
+                                  variant="text"
+                                  onClick={() =>
+                                    setEditModal({
+                                      visible: true,
+                                      type: 'category',
+                                      data: item,
+                                    })
+                                  }
+                                >
+                                  编辑
+                                </Button>
+                                <Button
+                                  type="text"
+                                  danger
+                                  loading={
+                                    deleteLoading?.type === 'category' &&
+                                    deleteLoading?.id === item.id
+                                  }
+                                  onClick={() =>
+                                    handleDelete('category', item.id)
+                                  }
+                                >
+                                  删除
+                                </Button>
+                              </div>
+                            </div>
+                          }
+                        />
+                      </List.Item>
+                    )}
+                  />
+                </div>
+              </div>
             </Card>
           </Col>
-          <Col span={6}>3333333333333</Col>
+          <Col span={6}>
+            <Card
+              className="h-full"
+              styles={{
+                body: {
+                  height: '100%',
+                },
+              }}
+            >
+              <div className="flex h-full w-full flex-col gap-1">
+                <div className="flex justify-between">
+                  <span className="text-[20px] font-[600]">标签</span>
+                  <Button
+                    type="primary"
+                    onClick={() =>
+                      setEditModal({
+                        visible: true,
+                        type: 'tag',
+                        data: null,
+                        isAdd: true,
+                      })
+                    }
+                  >
+                    新增
+                  </Button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto">
+                  <List
+                    itemLayout="horizontal"
+                    dataSource={tagsList}
+                    loading={isTagsLoading}
+                    renderItem={(item, _index) => (
+                      <List.Item>
+                        <List.Item.Meta
+                          avatar={
+                            <Tooltip title="使用次数">
+                              <div className="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-black">
+                                {item.usageCount}
+                              </div>
+                            </Tooltip>
+                          }
+                          title={
+                            <div className="flex items-center justify-between">
+                              <div>{item.name}</div>
+                              <div className="flex items-center gap-1">
+                                <Button
+                                  color="primary"
+                                  variant="text"
+                                  onClick={() =>
+                                    setEditModal({
+                                      visible: true,
+                                      type: 'tag',
+                                      data: item,
+                                    })
+                                  }
+                                >
+                                  编辑
+                                </Button>
+                                <Button
+                                  type="text"
+                                  danger
+                                  loading={
+                                    deleteLoading?.type === 'tag' &&
+                                    deleteLoading?.id === item.id
+                                  }
+                                  onClick={() => handleDelete('tag', item.id)}
+                                >
+                                  删除
+                                </Button>
+                              </div>
+                            </div>
+                          }
+                        />
+                      </List.Item>
+                    )}
+                  />
+                </div>
+              </div>
+            </Card>
+          </Col>
         </Row>
       </div>
+      <AddOrEditModal
+        open={editModal.visible}
+        title={
+          editModal.isAdd
+            ? editModal.type === 'category'
+              ? '新增分类'
+              : '新增标签'
+            : editModal.type === 'category'
+              ? '编辑分类'
+              : '编辑标签'
+        }
+        initialName={editModal.data?.name}
+        loading={editLoading}
+        onOk={handleEditSubmit}
+        onCancel={() =>
+          setEditModal({ visible: false, type: null, data: null, isAdd: false })
+        }
+      />
     </div>
   )
 }
