@@ -1,7 +1,9 @@
-import { type FC } from 'react'
+import { useRef, type FC } from 'react'
 import { Row, Col, Space } from 'antd'
 import CountUpCard from './components/CountUpCard'
 import React from 'react'
+import ChartsCard from '@/components/ChartsCard'
+import type { EChartsOption } from 'echarts'
 
 export const countUpData = [
   {
@@ -12,7 +14,7 @@ export const countUpData = [
   },
   {
     title: '评论数',
-    icon: 'email',
+    icon: 'message',
     count: 259,
     color: '#fa541c',
   },
@@ -30,6 +32,56 @@ export const countUpData = [
   },
 ]
 
+export const pieOptions: EChartsOption = {
+  legend: {
+    bottom: 0,
+    data: ['推广渠道', '访问来源', '广告投放'],
+  },
+  tooltip: {
+    trigger: 'item',
+    formatter: '{a} <br/>{b}: {c} ({d}%)',
+  },
+  series: [
+    {
+      name: '来源构成',
+      type: 'pie',
+      radius: ['40%', '70%'], // 环形饼图，去掉就是普通饼图
+      center: ['50%', '45%'],
+      avoidLabelOverlap: false,
+      label: {
+        show: true,
+        formatter: '{b}: {c}',
+      },
+      labelLine: {
+        show: true,
+      },
+      data: [
+        {
+          value: 1920 + 1920 + 1920,
+          name: '推广渠道',
+          itemStyle: {
+            color: '#1890ff',
+          },
+        },
+        {
+          value: 1920 + 0 + 0 + 1920 + 1920,
+          name: '访问来源',
+          itemStyle: {
+            color: '#722ed1',
+          },
+        },
+        {
+          value: 920 * 5,
+          name: '广告投放',
+          itemStyle: {
+            color: '#faad14',
+          },
+        },
+      ],
+    },
+  ],
+}
+
 const HomePage: FC = () => {
   const [isLoading, setIsLoading] = React.useState(true)
 
@@ -38,32 +90,34 @@ const HomePage: FC = () => {
   }, 1500)
 
   return (
-    <Space direction="vertical" size={12} style={{ display: 'flex' }}>
+    <div className="flex h-full min-h-0 flex-col gap-3">
       <Row gutter={12}>
-        {countUpData.map((item) => {
-          return (
-            <Col flex={1} key={item.title}>
-              <CountUpCard
-                loading={isLoading}
-                title={item.title}
-                color={item.color}
-                iconName={item.icon}
-                countNum={item.count}
-              />
-            </Col>
-          )
-        })}
+        {countUpData.map((item) => (
+          <Col flex={1} key={item.title}>
+            <CountUpCard
+              loading={isLoading}
+              title={item.title}
+              color={item.color}
+              iconName={item.icon}
+              countNum={item.count}
+            />
+          </Col>
+        ))}
       </Row>
-      <Row gutter={12}>
-        <Col span={8}>111111111</Col>
-        <Col span={8}>222222222222</Col>
-        <Col span={8}>3333333333333</Col>
-      </Row>
-      <Row gutter={12}>
-        <Col span={12}>444444</Col>
-        <Col span={12}>555555555555555555</Col>
-      </Row>
-    </Space>
+      <div className="flex-1">
+        <Row gutter={12} style={{ height: '100%' }}>
+          <Col span={12}>
+            <ChartsCard
+              loading={isLoading}
+              options={pieOptions}
+              height="100%"
+            />
+          </Col>
+          <Col span={6}>1111</Col>
+          <Col span={6}>3333333333333</Col>
+        </Row>
+      </div>
+    </div>
   )
 }
 

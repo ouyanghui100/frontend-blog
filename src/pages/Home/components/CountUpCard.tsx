@@ -20,7 +20,7 @@ const CountUpCard: FC<propState> = (props) => {
     >
       <div className="flex items-center">
         <div
-          className="rounded-tl-2 rounded-bl-2 flex h-[120px] w-[120px] items-center justify-center"
+          className="rounded-tl-2 rounded-bl-2 flex h-[160px] w-[160px] items-center justify-center"
           style={{
             background: props.color,
           }}
