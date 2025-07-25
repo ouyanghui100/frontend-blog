@@ -1,4 +1,3 @@
-import type { FC } from 'react'
 import { Result, Button } from 'antd'
 import { useNavigate, useLoaderData } from 'react-router-dom'
 import { ExceptionEnum } from '@/api'
@@ -9,7 +8,7 @@ const subTitleMap = new Map([
   [ExceptionEnum.SERVER_ERROR, '对不起，服务器发生错误。'],
 ])
 
-const PageException: FC = () => {
+const PageException: React.FC = () => {
   const navigate = useNavigate()
 
   const { status } = useLoaderData() as {

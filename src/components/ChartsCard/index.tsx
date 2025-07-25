@@ -1,4 +1,3 @@
-import { type FC } from 'react'
 import { Card } from 'antd'
 import EmptyCard from '@/components/EmptyCard'
 import { useECharts } from '@/hooks/useECharts'
@@ -9,7 +8,7 @@ interface propState {
   height: number | string
 }
 
-const ChartsCard: FC<propState> = ({ loading, options, height }) => {
+const ChartsCard: React.FC<propState> = ({ loading, options, height }) => {
   const { chartRef } = useECharts(options, loading)
 
   const hasData = options?.series?.[0]?.data?.length > 0
@@ -18,14 +17,10 @@ const ChartsCard: FC<propState> = ({ loading, options, height }) => {
     <Card
       loading={loading}
       variant="borderless"
-      style={{ height: '100%' }}
+      className="h-full"
       styles={{
         body: {
-          width: '100%',
           height: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignContent: 'center',
         },
       }}
     >

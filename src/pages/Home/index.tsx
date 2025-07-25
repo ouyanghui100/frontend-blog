@@ -1,5 +1,4 @@
-import { useRef, type FC } from 'react'
-import { Row, Col, Space } from 'antd'
+import { Row, Col, Card } from 'antd'
 import CountUpCard from './components/CountUpCard'
 import React from 'react'
 import ChartsCard from '@/components/ChartsCard'
@@ -82,7 +81,7 @@ export const pieOptions: EChartsOption = {
   ],
 }
 
-const HomePage: FC = () => {
+const HomePage: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(true)
 
   setTimeout(() => {
@@ -113,7 +112,18 @@ const HomePage: FC = () => {
               height="100%"
             />
           </Col>
-          <Col span={6}>1111</Col>
+          <Col span={6}>
+            <Card
+              className="h-full"
+              styles={{
+                body: {
+                  height: '100%',
+                },
+              }}
+            >
+              <p className="text-[20px] font-[600]">分类</p>
+            </Card>
+          </Col>
           <Col span={6}>3333333333333</Col>
         </Row>
       </div>

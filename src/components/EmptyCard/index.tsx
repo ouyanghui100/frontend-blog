@@ -1,4 +1,3 @@
-import type { FC } from 'react'
 import noData from '@/assets/images/no-data.png'
 import { Card } from 'antd'
 
@@ -8,7 +7,7 @@ interface propState {
   loading: boolean
 }
 
-const EmptyCard: FC<propState> = ({ wordData, style, loading }) => {
+const EmptyCard: React.FC<propState> = ({ wordData, style, loading }) => {
   console.log(wordData)
   return (
     <Card variant="borderless" loading={loading} style={style}>

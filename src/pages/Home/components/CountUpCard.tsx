@@ -1,4 +1,3 @@
-import type { FC } from 'react'
 import { Card } from 'antd'
 import CountUp from 'react-countup'
 import SvgIcon from '@/components/SvgIcon'
@@ -11,7 +10,7 @@ interface propState {
   countNum: number
 }
 
-const CountUpCard: FC<propState> = (props) => {
+const CountUpCard: React.FC<propState> = (props) => {
   return (
     <Card
       loading={props.loading}
