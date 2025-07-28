@@ -8,7 +8,7 @@ export default function LayoutBreadcrumb() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [breadcrumbs, setBreadcrumbs] = React.useState<any[]>([])
   const { pathname } = useLocation()
-  const menuList =  useMenuStore((state) => state.menuList)
+  const menuList = useMenuStore((state) => state.menuList)
 
   React.useEffect(() => {
     const matchRouteList = matchRoutes(menuList, pathname) || []
@@ -25,7 +25,7 @@ export default function LayoutBreadcrumb() {
       }
     })
     setBreadcrumbs(breadcrumbList)
-  }, [pathname,menuList])
+  }, [pathname, menuList])
 
   return (
     <div className="flex items-center px-4">
