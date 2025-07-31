@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { frontedBlogApi } from '@/api'
-import { getToken, setToken as saveToken, removeToken } from '@/utils/local'
 import type { User } from '@/api/frontedBlogApi'
+import { getToken, removeToken, setToken as saveToken } from '@/utils/local'
 
 interface UserState {
   token: string

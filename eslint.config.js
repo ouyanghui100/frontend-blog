@@ -1,12 +1,12 @@
 // 配置文档: https://eslint.nodejs.cn/
-import { defineFlatConfig } from 'eslint-define-config'
-import configPrettier from 'eslint-config-prettier'
-import pluginPrettier from 'eslint-plugin-prettier'
-import * as parserTypeScript from '@typescript-eslint/parser'
+import js from '@eslint/js'
 import pluginTypeScript from '@typescript-eslint/eslint-plugin'
+import * as parserTypeScript from '@typescript-eslint/parser'
+import configPrettier from 'eslint-config-prettier'
+import { defineFlatConfig } from 'eslint-define-config'
+import pluginPrettier from 'eslint-plugin-prettier'
 import pluginReact from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
-import js from '@eslint/js'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
 
 /** @type {import('eslint-define-config').FlatESLintConfig} */
