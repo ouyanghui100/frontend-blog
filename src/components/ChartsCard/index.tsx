@@ -4,6 +4,7 @@ import { useECharts } from '@/hooks/useECharts'
 
 interface propState {
   loading: boolean
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options: any
   height: number | string
 }
