@@ -1,5 +1,5 @@
-import SvgIcon from '@/components/SvgIcon'
 import classNames from 'classnames'
+import SvgIcon from '@/components/SvgIcon'
 import { useMenuStore } from '@/store/menu'
 
 export default function FoldTrigger() {

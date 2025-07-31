@@ -1,6 +1,6 @@
-import { getToken } from '@/utils/local'
 import type { ReactNode } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
+import { getToken } from '@/utils/local'
 
 export const GuardRoute = ({ children }: { children: ReactNode }) => {
   const whiteList: string[] = ['/', '/login']

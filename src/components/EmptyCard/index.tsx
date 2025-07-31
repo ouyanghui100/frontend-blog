@@ -1,5 +1,5 @@
-import noData from '@/assets/images/no-data.png'
 import { Card } from 'antd'
+import noData from '@/assets/images/no-data.png'
 
 interface propState {
   wordData?: string

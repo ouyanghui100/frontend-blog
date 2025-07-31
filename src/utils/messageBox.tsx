@@ -1,10 +1,10 @@
-import type { ModalFuncProps } from 'antd'
-import { Modal, message as Message } from 'antd'
 import {
-  InfoCircleFilled,
   CheckCircleFilled,
   CloseCircleFilled,
+  InfoCircleFilled,
 } from '@ant-design/icons'
+import type { ModalFuncProps } from 'antd'
+import { message as Message, Modal } from 'antd'
 import { isString } from './is'
 
 export interface ModalOptionsEx extends Omit<ModalFuncProps, 'iconType'> {

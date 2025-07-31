@@ -1,7 +1,8 @@
 import React from 'react'
-import type { EChartsOption } from 'echarts'
 import { useDebounceFn } from 'ahooks'
+import type { EChartsOption } from 'echarts'
 import echarts from '@/utils/echarts'
+
 export function useECharts(
   options: EChartsOption,
   loading: boolean = true,

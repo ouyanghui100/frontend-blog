@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { message } from 'antd'
 import axios, {
   type AxiosInstance,
   type AxiosRequestConfig,
   type AxiosResponse,
   type InternalAxiosRequestConfig,
 } from 'axios'
-import { message } from 'antd'
 import { get, merge } from 'lodash-es'
-import { getToken } from '@/utils/local'
 import { API_CONFIG } from '@/config'
+import { getToken } from '@/utils/local'
 
 export interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   method?: string

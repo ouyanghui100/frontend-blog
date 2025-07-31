@@ -1,12 +1,12 @@
-import { Row, Col, Card, List, Button, Tooltip, message } from 'antd'
-import CountUpCard from './components/CountUpCard'
 import React from 'react'
-import ChartsCard from '@/components/ChartsCard'
+import { Button, Card, Col, List, message, Row, Tooltip } from 'antd'
 import type { EChartsOption } from 'echarts'
-import type { Category, Tag } from '@/api/frontedBlogApi'
 import { frontedBlogApi } from '@/api'
-import AddOrEditModal from './components/AddOrEditModal'
+import type { Category, Tag } from '@/api/frontedBlogApi'
+import ChartsCard from '@/components/ChartsCard'
 import { messageBox } from '@/utils/messageBox'
+import AddOrEditModal from './components/AddOrEditModal'
+import CountUpCard from './components/CountUpCard'
 
 export const countUpData = [
   {

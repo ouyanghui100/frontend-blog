@@ -1,10 +1,10 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { createStyleImportPlugin } from 'vite-plugin-style-import'
-import * as reactPlugin from 'vite-plugin-react'
-import { resolve } from 'path'
-import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import tailwindcss from '@tailwindcss/vite'
+import react from '@vitejs/plugin-react'
+import { resolve } from 'path'
+import { defineConfig } from 'vite'
+import * as reactPlugin from 'vite-plugin-react'
+import { createStyleImportPlugin } from 'vite-plugin-style-import'
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
 const target = 'http://localhost:3000'
 

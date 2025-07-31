@@ -1,12 +1,12 @@
-import type { MenuProps } from 'antd'
 import React from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import type { MenuProps } from 'antd'
 import { Menu, Spin } from 'antd'
+import SvgIcon from '@/components/SvgIcon'
 import { getAsyncMenus } from '@/router/menus'
 import type { AppMenu } from '@/router/types'
-import { getOpenKeys } from '@/utils/helper'
-import SvgIcon from '@/components/SvgIcon'
 import { useMenuStore } from '@/store/menu'
+import { getOpenKeys } from '@/utils/helper'
 
 type MenuItem = Required<MenuProps>['items'][number]
 

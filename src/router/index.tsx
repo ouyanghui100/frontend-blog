@@ -1,9 +1,9 @@
-import { Navigate, createHashRouter, redirect } from 'react-router-dom'
-import type { RouteObject } from './types'
-import { genFullPath } from './helpers'
+import { createHashRouter, Navigate, redirect } from 'react-router-dom'
+import PageException from '@/pages/Exception'
 import LoginPage from '@/pages/Login'
 import { getToken } from '@/utils/local'
-import PageException from '@/pages/Exception'
+import { genFullPath } from './helpers'
+import type { RouteObject } from './types'
 
 const metaRoutes = import.meta.glob('./routes/*.tsx', {
   eager: true,

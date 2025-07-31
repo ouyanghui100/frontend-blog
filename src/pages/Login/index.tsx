@@ -1,9 +1,9 @@
 import React from 'react'
-import { Button, Form, Input, message } from 'antd'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
+import { Button, Form, Input, message } from 'antd'
 import { frontedBlogApi } from '@/api'
 import { getToken, setToken } from '@/utils/local'
-import { useNavigate, useSearchParams } from 'react-router-dom'
 const LoginPage: React.FC = () => {
   type FieldType = {
     username?: string

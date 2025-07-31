@@ -1,6 +1,6 @@
+import { type ReactNode, Suspense } from 'react'
 import type { LoadableComponent } from '@loadable/component'
 import { Spin } from 'antd'
-import { Suspense, type ReactNode } from 'react'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const LazyLoad = (Component: LoadableComponent<any>): ReactNode => {

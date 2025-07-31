@@ -1,12 +1,11 @@
+import React from 'react'
 import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
-import '@/design/index.scss'
 import '@ant-design/v5-patch-for-react-19'
-
+import App from './App.tsx'
+import '@/design/index.scss'
+import './index.css'
 // register svg icon
 import 'virtual:svg-icons-register'
-import React from 'react'
 import { ConfigProvider } from 'antd'
 import zhCN from 'antd/es/locale/zh_CN'
 
