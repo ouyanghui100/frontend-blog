@@ -1,1 +1,9 @@
-@import 'tailwindcss';
+/*原本写法：其中包括了@layer优先级配置，和几大css的导入*/
+/*@import "tailwindcss";*/
+
+/*修改后写法*/
+@import 'tailwindcss/theme.css';
+/* 不引入preflight，对应以前的preflight=false */
+/*@import "tailwindcss/preflight.css" layer(base);*/
+@import 'tailwindcss/utilities.css';
+@import 'ant-design/dist/reset.css';
