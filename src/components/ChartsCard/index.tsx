@@ -19,10 +19,8 @@ const ChartsCard: React.FC<propState> = ({ loading, options, height }) => {
       loading={loading}
       variant="borderless"
       className="h-full"
-      styles={{
-        body: {
-          height: '100%',
-        },
+      classNames={{
+        body: 'h-full',
       }}
     >
       <div ref={chartRef} style={{ width: '100%', height }} />

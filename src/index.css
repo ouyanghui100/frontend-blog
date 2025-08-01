@@ -6,4 +6,4 @@
 /* 不引入preflight，对应以前的preflight=false */
 /*@import "tailwindcss/preflight.css" layer(base);*/
 @import 'tailwindcss/utilities.css';
-@import 'ant-design/dist/reset.css';
+@import 'antd/dist/reset.css';

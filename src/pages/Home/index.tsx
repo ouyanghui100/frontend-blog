@@ -222,10 +222,8 @@ const HomePage: React.FC = () => {
           <Col span={6}>
             <Card
               className="h-full"
-              styles={{
-                body: {
-                  height: '100%',
-                },
+              classNames={{
+                body: 'h-full',
               }}
             >
               <div className="flex h-full w-full flex-col gap-1">
@@ -305,10 +303,8 @@ const HomePage: React.FC = () => {
           <Col span={6}>
             <Card
               className="h-full"
-              styles={{
-                body: {
-                  height: '100%',
-                },
+              classNames={{
+                body: 'h-full',
               }}
             >
               <div className="flex h-full w-full flex-col gap-1">
