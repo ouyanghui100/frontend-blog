@@ -59,6 +59,7 @@ export default function UserDropdown() {
   }
   // #endregion
 
+  // #region 获取用户信息
   const { getProfile } = useUserStore()
   const [userInfo, setUserInfo] = React.useState<User | null>(null)
   React.useEffect(() => {
@@ -73,6 +74,7 @@ export default function UserDropdown() {
     fetchProfile()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  // #endregion
 
   // #region 头像
   return (

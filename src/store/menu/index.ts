@@ -22,7 +22,6 @@ export const useMenuStore = create<MenuState & MenuActions>((set) => ({
   collapsed: getCollapsed() || false,
   menuList: [],
   setMenuList: (menuList) => {
-    console.log('44444444444444444444', menuList)
     set({ menuList })
   },
   setCollapsed: () =>

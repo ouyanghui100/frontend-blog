@@ -48,6 +48,7 @@ const LayoutMenu = () => {
     )
   }
 
+  // #region 获取菜单
   const getMenuItem = (data: AppMenu[], list: MenuItem[] = []) => {
     data.forEach((item: AppMenu) => {
       if (!item?.children?.length) {
@@ -64,12 +65,10 @@ const LayoutMenu = () => {
     })
     return list
   }
-
   const getMenuList = async () => {
     setLoading(true)
     try {
       const menus = await getAsyncMenus()
-      console.log('222222222222222222', menus)
       setMenuList(getMenuItem(menus))
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setMenuListGlobal(menus as any)
@@ -81,7 +80,9 @@ const LayoutMenu = () => {
   React.useEffect(() => {
     getMenuList()
   }, [])
+  // #endregion
 
+  // #region 控制菜单
   const handleOpenChange: MenuProps['onOpenChange'] = (keys: string[]) => {
     if (keys.length === 0 || keys.length === 1) return setOpenKeys(keys)
     const latestKey = keys[keys.length - 1]
@@ -93,6 +94,7 @@ const LayoutMenu = () => {
   const handleMenuClick: MenuProps['onClick'] = ({ key }: { key: string }) => {
     navigate(key)
   }
+  // #endregion
 
   return (
     <div>

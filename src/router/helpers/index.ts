@@ -15,6 +15,7 @@ export function joinParentPath(menus: AppMenu[], parentPath = '') {
     }
   }
 }
+
 export function genFullPath(routes: RouteObject[], parentPath = '') {
   for (let index = 0; index < routes.length; index++) {
     const route = routes[index]

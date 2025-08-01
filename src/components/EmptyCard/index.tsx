@@ -8,7 +8,6 @@ interface propState {
 }
 
 const EmptyCard: React.FC<propState> = ({ wordData, style, loading }) => {
-  console.log(wordData)
   return (
     <Card variant="borderless" loading={loading} style={style}>
       <div className="flex items-center justify-center px-8 py-12">

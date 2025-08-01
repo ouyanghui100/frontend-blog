@@ -4,6 +4,7 @@ import pluginTypeScript from '@typescript-eslint/eslint-plugin'
 import * as parserTypeScript from '@typescript-eslint/parser'
 import configPrettier from 'eslint-config-prettier'
 import { defineFlatConfig } from 'eslint-define-config'
+import importPlugin from 'eslint-plugin-import'
 import pluginPrettier from 'eslint-plugin-prettier'
 import pluginReact from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
@@ -18,6 +19,7 @@ export default defineFlatConfig([
       prettier: pluginPrettier,
       react: pluginReact,
       'simple-import-sort': simpleImportSort,
+      import: importPlugin,
     },
     rules: {
       ...configPrettier.rules,
@@ -59,6 +61,8 @@ export default defineFlatConfig([
           ],
         },
       ],
+      // 最后一个 import 之后必须有一个空行
+      'import/newline-after-import': ['error', { count: 1 }],
       'react/self-closing-comp': [
         'error',
         {

@@ -4,11 +4,13 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Form, Input, message } from 'antd'
 import { frontedBlogApi } from '@/api'
 import { getToken, setToken } from '@/utils/local'
+
 const LoginPage: React.FC = () => {
   type FieldType = {
     username?: string
     password?: string
   }
+
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [form] = Form.useForm()
@@ -24,13 +26,16 @@ const LoginPage: React.FC = () => {
     }
   }
 
+  // #region 游客登录
   const handleGuestAccess = async () => {
     const { accessToken } = await frontedBlogApi.guestAccess()
     setToken(accessToken)
     afterLoginAction(true)
     message.success('登录成功')
   }
+  // #endregion
 
+  // #region 管理员登录
   const handleAdminLogin = async () => {
     const { password, username } = await form.validateFields()
     const { accessToken } = await frontedBlogApi.adminLogin({
@@ -41,6 +46,7 @@ const LoginPage: React.FC = () => {
     afterLoginAction(true)
     message.success('登录成功')
   }
+  // #endregion
 
   return (
     <div className="flex h-full w-full">
