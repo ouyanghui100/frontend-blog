@@ -15,7 +15,9 @@ const CountUpCard: React.FC<propState> = (props) => {
     <Card
       loading={props.loading}
       variant="borderless"
-      styles={{ body: { padding: 0 } }}
+      classNames={{
+        body: 'p-0',
+      }}
     >
       <div className="flex items-center">
         <div
