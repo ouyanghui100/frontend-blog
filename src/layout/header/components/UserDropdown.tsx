@@ -1,8 +1,11 @@
+import { useNavigate } from 'react-router-dom'
 import { PoweroffOutlined } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { Dropdown, Space } from 'antd'
 // import { useNavigate } from 'react-router-dom'
 import headerImg from '@/assets/images/avatar.jpg'
+import { useUserStore } from '@/store/user'
+import { getToken } from '@/utils/local'
 import { messageBox } from '@/utils/messageBox'
 
 export default function UserDropdown() {
@@ -26,7 +29,8 @@ export default function UserDropdown() {
     }
   }
 
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
+  const { logout } = useUserStore()
 
   const handleLogout = () => {
     const { createConfirm } = messageBox()
@@ -36,21 +40,22 @@ export default function UserDropdown() {
       title: <span>温馨提醒</span>,
       content: <span>是否确认退出系统?</span>,
       onOk: async () => {
-        await logoutAction()
+        await logoutAction(true)
       },
     })
   }
 
-  const logoutAction = async () => {
-    // if (getToken()) {
-    //   try {
-    //     await logoutApi()
-    //   } catch (error) {
-    //     const { createMessage } = messageBox()
-    //     createMessage.error('注销失败!')
-    //   }
-    // }
-    // goLogin && navigate('/login')
+  const logoutAction = async (goLogin = false) => {
+    if (getToken()) {
+      try {
+        await logout()
+      } catch (error) {
+        const { createMessage } = messageBox()
+        createMessage.error('注销失败!')
+        console.log(error)
+      }
+    }
+    goLogin && navigate('/login')
   }
 
   return (

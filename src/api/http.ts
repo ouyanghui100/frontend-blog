@@ -8,7 +8,7 @@ import axios, {
 } from 'axios'
 import { get, merge } from 'lodash-es'
 import { API_CONFIG } from '@/config'
-import { getToken } from '@/utils/local'
+import { getToken, removeToken } from '@/utils/local'
 
 export interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   method?: string
@@ -27,6 +27,14 @@ const createUrl = (path = '', obj = {}) => {
 const noMessageCodeList: number[] = [
   // 错误码
 ]
+
+// 不能写成 const token = useAuthStore(state => state.token)  // 这是 hook 用法
+// 循环依赖了，useUserStore初始化依赖http.ts，http.ts初始化依赖useUserStore
+// const { logout } = useUserStore.getState()
+
+const logout = () => {
+  removeToken()
+}
 
 /** 创建请求实例 */
 function createService() {
@@ -80,7 +88,7 @@ function createService() {
           return apiData.data
         case 401:
           // Token 过期时，登出逻辑可在此补充
-          // TODO: 处理登出逻辑
+          logout()
           return Promise.reject(apiData)
         default:
           !noMessageCodeList.includes(code) &&
@@ -96,7 +104,7 @@ function createService() {
           break
         case 401:
           // Token 过期时，登出逻辑可在此补充
-          // TODO: 处理登出逻辑
+          logout()
           break
         case 403:
           error.message = '拒绝访问'
