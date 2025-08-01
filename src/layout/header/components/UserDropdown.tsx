@@ -85,7 +85,7 @@ export default function UserDropdown() {
           <img src={headerImg} className="h-6 w-6 rounded-full" alt="" />
         </span>
       ) : (
-        <div className="lh-10 flex h-10 w-10 items-center justify-center rounded-full bg-blue-300 text-[#fff]">
+        <div className="lh-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-blue-300 text-[#fff]">
           游客
         </div>
       )}
