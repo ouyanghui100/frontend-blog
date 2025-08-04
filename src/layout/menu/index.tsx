@@ -92,6 +92,7 @@ const LayoutMenu = () => {
 
   const navigate = useNavigate()
   const handleMenuClick: MenuProps['onClick'] = ({ key }: { key: string }) => {
+    if (key === pathname) return // 跳过同一路径
     navigate(key)
   }
   // #endregion
