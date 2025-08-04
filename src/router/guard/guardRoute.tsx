@@ -9,12 +9,11 @@ export const GuardRoute = ({ children }: { children: ReactNode }) => {
   const { pathname } = useLocation()
 
   // #region 加载条
+  React.useState(nprogress.start())
   React.useEffect(() => {
-    nprogress.start()
-    return () => {
-      nprogress.done()
-    }
-  }, [pathname])
+    nprogress.done()
+    return () => nprogress.start()
+  })
   // #endregion
 
   if (!getToken()) {

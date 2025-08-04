@@ -81,7 +81,7 @@ export default function UserDropdown() {
     <Dropdown menu={{ items, onClick }} placement="bottomRight" arrow>
       {userInfo?.role === 'admin' ? (
         <span className="flex cursor-pointer items-center gap-2">
-          <span className="text-blue-500">管理员</span>
+          <span className="text-blue-500">{userInfo.username}</span>
           <img src={headerImg} className="h-6 w-6 rounded-full" alt="" />
         </span>
       ) : (
