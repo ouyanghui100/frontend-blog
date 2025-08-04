@@ -4,6 +4,8 @@ import type { EChartsOption } from 'echarts'
 import { frontedBlogApi } from '@/api'
 import type { Category, Tag } from '@/api/frontedBlogApi'
 import ChartsCard from '@/components/ChartsCard'
+import { PermissionButton, type Role } from '@/components/HOC/PermissionButton'
+import { useUserStore } from '@/store/user'
 import { messageBox } from '@/utils/messageBox'
 import AddOrEditModal from './components/AddOrEditModal'
 import CountUpCard from './components/CountUpCard'
@@ -86,6 +88,7 @@ export const pieOptions: EChartsOption = {
 }
 
 const HomePage: React.FC = () => {
+  const { userInfo } = useUserStore()
   const [isCategoriesLoading, setIsCategoriesLoading] = React.useState(true)
   const [isTagsLoading, setIsTagsLoading] = React.useState(true)
 
@@ -229,8 +232,9 @@ const HomePage: React.FC = () => {
               <div className="flex h-full w-full flex-col gap-1">
                 <div className="flex justify-between">
                   <span className="text-[20px] font-[600]">分类</span>
-                  <Button
+                  <PermissionButton
                     type="primary"
+                    role={userInfo?.role as Role | undefined}
                     onClick={() =>
                       setEditModal({
                         visible: true,
@@ -241,7 +245,7 @@ const HomePage: React.FC = () => {
                     }
                   >
                     新增
-                  </Button>
+                  </PermissionButton>
                 </div>
 
                 <div className="flex-1 overflow-y-auto">
@@ -263,8 +267,9 @@ const HomePage: React.FC = () => {
                             <div className="flex items-center justify-between">
                               <div>{item.name}</div>
                               <div className="flex items-center gap-1">
-                                <Button
+                                <PermissionButton
                                   color="primary"
+                                  role={userInfo?.role as Role | undefined}
                                   variant="text"
                                   onClick={() =>
                                     setEditModal({
@@ -275,9 +280,10 @@ const HomePage: React.FC = () => {
                                   }
                                 >
                                   编辑
-                                </Button>
-                                <Button
+                                </PermissionButton>
+                                <PermissionButton
                                   type="text"
+                                  role={userInfo?.role as Role | undefined}
                                   danger
                                   loading={
                                     deleteLoading?.type === 'category' &&
@@ -288,7 +294,7 @@ const HomePage: React.FC = () => {
                                   }
                                 >
                                   删除
-                                </Button>
+                                </PermissionButton>
                               </div>
                             </div>
                           }
@@ -310,7 +316,8 @@ const HomePage: React.FC = () => {
               <div className="flex h-full w-full flex-col gap-1">
                 <div className="flex justify-between">
                   <span className="text-[20px] font-[600]">标签</span>
-                  <Button
+                  <PermissionButton
+                    role={userInfo?.role as Role | undefined}
                     type="primary"
                     onClick={() =>
                       setEditModal({
@@ -322,7 +329,7 @@ const HomePage: React.FC = () => {
                     }
                   >
                     新增
-                  </Button>
+                  </PermissionButton>
                 </div>
 
                 <div className="flex-1 overflow-y-auto">
@@ -344,7 +351,8 @@ const HomePage: React.FC = () => {
                             <div className="flex items-center justify-between">
                               <div>{item.name}</div>
                               <div className="flex items-center gap-1">
-                                <Button
+                                <PermissionButton
+                                  role={userInfo?.role as Role | undefined}
                                   color="primary"
                                   variant="text"
                                   onClick={() =>
@@ -356,9 +364,10 @@ const HomePage: React.FC = () => {
                                   }
                                 >
                                   编辑
-                                </Button>
-                                <Button
+                                </PermissionButton>
+                                <PermissionButton
                                   type="text"
+                                  role={userInfo?.role as Role | undefined}
                                   danger
                                   loading={
                                     deleteLoading?.type === 'tag' &&
@@ -367,7 +376,7 @@ const HomePage: React.FC = () => {
                                   onClick={() => handleDelete('tag', item.id)}
                                 >
                                   删除
-                                </Button>
+                                </PermissionButton>
                               </div>
                             </div>
                           }

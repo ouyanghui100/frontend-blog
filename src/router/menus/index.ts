@@ -5,7 +5,6 @@ import { basicRoutes } from '..'
 // Get async menus
 export async function getAsyncMenus(): Promise<AppMenu[]> {
   const staticMenus = transformRouteToMenu(basicRoutes)
-  console.log('333333333333333', staticMenus)
   staticMenus.sort((a, b) => {
     return (
       (a?.orderNo || staticMenus.length) - (b?.orderNo || staticMenus.length)
