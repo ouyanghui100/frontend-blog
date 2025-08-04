@@ -11,7 +11,6 @@ export const GuardRoute = ({ children }: { children: ReactNode }) => {
   // #region 加载条
   React.useEffect(() => {
     nprogress.start()
-    nprogress.done()
     return () => {
       nprogress.done()
     }
