@@ -1,20 +1,12 @@
 import type { ReactNode } from 'react'
-import React from 'react'
+// import React from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { getToken } from '@/utils/local'
-import nprogress from '@/utils/nprogress'
+// import nprogress from '@/utils/nprogress'
 
 export const GuardRoute = ({ children }: { children: ReactNode }) => {
   const whiteList: string[] = ['/', '/login']
   const { pathname } = useLocation()
-
-  // #region 加载条
-  React.useState(nprogress.start())
-  React.useEffect(() => {
-    nprogress.done()
-    return () => nprogress.start()
-  })
-  // #endregion
 
   if (!getToken()) {
     if (whiteList.includes(pathname)) {
