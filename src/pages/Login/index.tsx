@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Form, Input, message } from 'antd'
+import { Button, Form, Input, type InputRef, message } from 'antd'
 import { frontedBlogApi } from '@/api'
 import { getToken, setToken } from '@/utils/local'
 
@@ -48,6 +48,34 @@ const LoginPage: React.FC = () => {
   }
   // #endregion
 
+  // #region 处理回车键登录逻辑
+  const passwordInputRef = React.useRef<InputRef>(null) // 用于检测密码输入框焦点
+  const handleKeyPress = (e: KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+
+      // 检查焦点是否在密码输入框
+      const isPasswordFocused =
+        document.activeElement === passwordInputRef.current?.input
+
+      if (isPasswordFocused) {
+        handleAdminLogin()
+      } else {
+        handleGuestAccess()
+      }
+    }
+  }
+
+  // 添加全局键盘事件监听
+  React.useEffect(() => {
+    document.addEventListener('keypress', handleKeyPress)
+
+    return () => {
+      document.removeEventListener('keypress', handleKeyPress)
+    }
+  }, [])
+  // #endregion
+
   return (
     <div className="flex h-full w-full">
       <div className="flex h-full w-1/2 items-center justify-center bg-[#12538f] p-[40px] text-[70px] font-[700] text-[#fff]">
@@ -83,7 +111,10 @@ const LoginPage: React.FC = () => {
                 },
               ]}
             >
-              <Input.Password prefix={<LockOutlined />} />
+              <Input.Password
+                prefix={<LockOutlined />}
+                ref={passwordInputRef}
+              />
             </Form.Item>
           </Form>
           <div className="flex w-full justify-between px-4">
