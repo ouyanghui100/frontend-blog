@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Form, Input, type InputRef, message } from 'antd'
+import { Button, Form, Input, type InputRef, message } from 'antd' // type GetRef,
 import { frontedBlogApi } from '@/api'
 import { getToken, setToken } from '@/utils/local'
 
@@ -49,6 +49,7 @@ const LoginPage: React.FC = () => {
   // #endregion
 
   // #region 处理回车键登录逻辑
+  // type InputRefType = GetRef<typeof Input>
   const passwordInputRef = React.useRef<InputRef>(null) // 用于检测密码输入框焦点
   const handleKeyPress = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
