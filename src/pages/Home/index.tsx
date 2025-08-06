@@ -203,7 +203,7 @@ const HomePage: React.FC = () => {
   // #endregion
 
   return (
-    <div className="flex h-full min-h-0 flex-col gap-3">
+    <div className="flex h-full flex-col gap-3">
       <Row gutter={[12, 12]}>
         {countUpData.map((item) => (
           <Col flex={1} key={item.title}>
@@ -217,179 +217,177 @@ const HomePage: React.FC = () => {
           </Col>
         ))}
       </Row>
-      <div className="min-h-0 flex-1">
-        <Row gutter={12} style={{ height: '100%' }}>
-          <Col span={12} style={{ height: '100%' }}>
-            <ChartsCard options={pieOptions} height="100%" loading={false} />
-          </Col>
-          <Col span={6} style={{ height: '100%' }}>
-            <Card
-              className="h-full"
-              classNames={{
-                body: 'h-full',
-              }}
-            >
-              <div className="flex h-full w-full flex-col gap-1">
-                <div className="flex justify-between">
-                  <span className="text-[20px] font-[600]">分类</span>
-                  <PermissionButton
-                    type="primary"
-                    role={userInfo?.role as Role | undefined}
-                    onClick={() =>
-                      setEditModal({
-                        visible: true,
-                        type: 'category',
-                        data: null,
-                        isAdd: true,
-                      })
-                    }
-                  >
-                    新增
-                  </PermissionButton>
-                </div>
-
-                <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto">
-                  <List
-                    loading={isCategoriesLoading}
-                    itemLayout="horizontal"
-                    dataSource={categoriesList}
-                    renderItem={(item, _index) => (
-                      <List.Item>
-                        <List.Item.Meta
-                          avatar={
-                            <Tooltip title="文章总数">
-                              <div className="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-black">
-                                {item.articleCount}
-                              </div>
-                            </Tooltip>
-                          }
-                          title={
-                            <div className="flex items-center justify-between">
-                              <div>{item.name}</div>
-                              <div className="flex items-center gap-1">
-                                <PermissionButton
-                                  color="primary"
-                                  role={userInfo?.role as Role | undefined}
-                                  variant="text"
-                                  onClick={() =>
-                                    setEditModal({
-                                      visible: true,
-                                      type: 'category',
-                                      data: item,
-                                    })
-                                  }
-                                >
-                                  编辑
-                                </PermissionButton>
-                                <PermissionButton
-                                  type="text"
-                                  role={userInfo?.role as Role | undefined}
-                                  danger
-                                  loading={
-                                    deleteLoading?.type === 'category' &&
-                                    deleteLoading?.id === item.id
-                                  }
-                                  onClick={() =>
-                                    handleDelete('category', item.id)
-                                  }
-                                >
-                                  删除
-                                </PermissionButton>
-                              </div>
-                            </div>
-                          }
-                        />
-                      </List.Item>
-                    )}
-                  />
-                </div>
+      <Row gutter={12} style={{ height: '100%', minHeight: 0, flex: 1 }}>
+        <Col span={12} style={{ height: '100%' }}>
+          <ChartsCard options={pieOptions} height="100%" loading={false} />
+        </Col>
+        <Col span={6} style={{ height: '100%' }}>
+          <Card
+            className="h-full"
+            classNames={{
+              body: 'h-full',
+            }}
+          >
+            <div className="flex h-full w-full flex-col gap-1">
+              <div className="flex justify-between">
+                <span className="text-[20px] font-[600]">分类</span>
+                <PermissionButton
+                  type="primary"
+                  role={userInfo?.role as Role | undefined}
+                  onClick={() =>
+                    setEditModal({
+                      visible: true,
+                      type: 'category',
+                      data: null,
+                      isAdd: true,
+                    })
+                  }
+                >
+                  新增
+                </PermissionButton>
               </div>
-            </Card>
-          </Col>
-          <Col span={6} style={{ height: '100%' }}>
-            <Card
-              className="h-full"
-              classNames={{
-                body: 'h-full',
-              }}
-            >
-              <div className="flex h-full w-full flex-col gap-1">
-                <div className="flex justify-between">
-                  <span className="text-[20px] font-[600]">标签</span>
-                  <PermissionButton
-                    role={userInfo?.role as Role | undefined}
-                    type="primary"
-                    onClick={() =>
-                      setEditModal({
-                        visible: true,
-                        type: 'tag',
-                        data: null,
-                        isAdd: true,
-                      })
-                    }
-                  >
-                    新增
-                  </PermissionButton>
-                </div>
 
-                <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto">
-                  <List
-                    itemLayout="horizontal"
-                    dataSource={tagsList}
-                    loading={isTagsLoading}
-                    renderItem={(item, _index) => (
-                      <List.Item>
-                        <List.Item.Meta
-                          avatar={
-                            <Tooltip title="使用次数">
-                              <div className="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-black">
-                                {item.usageCount}
-                              </div>
-                            </Tooltip>
-                          }
-                          title={
-                            <div className="flex items-center justify-between">
-                              <div>{item.name}</div>
-                              <div className="flex items-center gap-1">
-                                <PermissionButton
-                                  role={userInfo?.role as Role | undefined}
-                                  color="primary"
-                                  variant="text"
-                                  onClick={() =>
-                                    setEditModal({
-                                      visible: true,
-                                      type: 'tag',
-                                      data: item,
-                                    })
-                                  }
-                                >
-                                  编辑
-                                </PermissionButton>
-                                <PermissionButton
-                                  type="text"
-                                  role={userInfo?.role as Role | undefined}
-                                  danger
-                                  loading={
-                                    deleteLoading?.type === 'tag' &&
-                                    deleteLoading?.id === item.id
-                                  }
-                                  onClick={() => handleDelete('tag', item.id)}
-                                >
-                                  删除
-                                </PermissionButton>
-                              </div>
+              <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto">
+                <List
+                  loading={isCategoriesLoading}
+                  itemLayout="horizontal"
+                  dataSource={categoriesList}
+                  renderItem={(item, _index) => (
+                    <List.Item>
+                      <List.Item.Meta
+                        avatar={
+                          <Tooltip title="文章总数">
+                            <div className="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-black">
+                              {item.articleCount}
                             </div>
-                          }
-                        />
-                      </List.Item>
-                    )}
-                  />
-                </div>
+                          </Tooltip>
+                        }
+                        title={
+                          <div className="flex items-center justify-between">
+                            <div>{item.name}</div>
+                            <div className="flex items-center gap-1">
+                              <PermissionButton
+                                color="primary"
+                                role={userInfo?.role as Role | undefined}
+                                variant="text"
+                                onClick={() =>
+                                  setEditModal({
+                                    visible: true,
+                                    type: 'category',
+                                    data: item,
+                                  })
+                                }
+                              >
+                                编辑
+                              </PermissionButton>
+                              <PermissionButton
+                                type="text"
+                                role={userInfo?.role as Role | undefined}
+                                danger
+                                loading={
+                                  deleteLoading?.type === 'category' &&
+                                  deleteLoading?.id === item.id
+                                }
+                                onClick={() =>
+                                  handleDelete('category', item.id)
+                                }
+                              >
+                                删除
+                              </PermissionButton>
+                            </div>
+                          </div>
+                        }
+                      />
+                    </List.Item>
+                  )}
+                />
               </div>
-            </Card>
-          </Col>
-        </Row>
-      </div>
+            </div>
+          </Card>
+        </Col>
+        <Col span={6} style={{ height: '100%' }}>
+          <Card
+            className="h-full"
+            classNames={{
+              body: 'h-full',
+            }}
+          >
+            <div className="flex h-full w-full flex-col gap-1">
+              <div className="flex justify-between">
+                <span className="text-[20px] font-[600]">标签</span>
+                <PermissionButton
+                  role={userInfo?.role as Role | undefined}
+                  type="primary"
+                  onClick={() =>
+                    setEditModal({
+                      visible: true,
+                      type: 'tag',
+                      data: null,
+                      isAdd: true,
+                    })
+                  }
+                >
+                  新增
+                </PermissionButton>
+              </div>
+
+              <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto">
+                <List
+                  itemLayout="horizontal"
+                  dataSource={tagsList}
+                  loading={isTagsLoading}
+                  renderItem={(item, _index) => (
+                    <List.Item>
+                      <List.Item.Meta
+                        avatar={
+                          <Tooltip title="使用次数">
+                            <div className="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-black">
+                              {item.usageCount}
+                            </div>
+                          </Tooltip>
+                        }
+                        title={
+                          <div className="flex items-center justify-between">
+                            <div>{item.name}</div>
+                            <div className="flex items-center gap-1">
+                              <PermissionButton
+                                role={userInfo?.role as Role | undefined}
+                                color="primary"
+                                variant="text"
+                                onClick={() =>
+                                  setEditModal({
+                                    visible: true,
+                                    type: 'tag',
+                                    data: item,
+                                  })
+                                }
+                              >
+                                编辑
+                              </PermissionButton>
+                              <PermissionButton
+                                type="text"
+                                role={userInfo?.role as Role | undefined}
+                                danger
+                                loading={
+                                  deleteLoading?.type === 'tag' &&
+                                  deleteLoading?.id === item.id
+                                }
+                                onClick={() => handleDelete('tag', item.id)}
+                              >
+                                删除
+                              </PermissionButton>
+                            </div>
+                          </div>
+                        }
+                      />
+                    </List.Item>
+                  )}
+                />
+              </div>
+            </div>
+          </Card>
+        </Col>
+      </Row>
       <AddOrEditModal
         open={editModal.visible}
         title={
