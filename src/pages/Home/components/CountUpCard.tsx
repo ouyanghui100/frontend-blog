@@ -28,7 +28,7 @@ const CountUpCard: React.FC<propState> = (props) => {
         >
           <SvgIcon name={props.iconName} size={40} className="text-[#fff]" />
         </div>
-        <div className="flex-1 text-center">
+        <div className="min-h-0 flex-1 text-center">
           <CountUp
             start={0}
             end={props.countNum}

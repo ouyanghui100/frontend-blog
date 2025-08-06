@@ -217,12 +217,12 @@ const HomePage: React.FC = () => {
           </Col>
         ))}
       </Row>
-      <div className="flex-1">
+      <div className="min-h-0 flex-1">
         <Row gutter={12} style={{ height: '100%' }}>
-          <Col span={12}>
+          <Col span={12} style={{ height: '100%' }}>
             <ChartsCard options={pieOptions} height="100%" loading={false} />
           </Col>
-          <Col span={6}>
+          <Col span={6} style={{ height: '100%' }}>
             <Card
               className="h-full"
               classNames={{
@@ -248,7 +248,7 @@ const HomePage: React.FC = () => {
                   </PermissionButton>
                 </div>
 
-                <div className="flex-1 overflow-y-auto">
+                <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto">
                   <List
                     loading={isCategoriesLoading}
                     itemLayout="horizontal"
@@ -306,7 +306,7 @@ const HomePage: React.FC = () => {
               </div>
             </Card>
           </Col>
-          <Col span={6}>
+          <Col span={6} style={{ height: '100%' }}>
             <Card
               className="h-full"
               classNames={{
@@ -332,7 +332,7 @@ const HomePage: React.FC = () => {
                   </PermissionButton>
                 </div>
 
-                <div className="flex-1 overflow-y-auto">
+                <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto">
                   <List
                     itemLayout="horizontal"
                     dataSource={tagsList}
