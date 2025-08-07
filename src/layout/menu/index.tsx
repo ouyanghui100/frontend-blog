@@ -5,6 +5,7 @@ import { Menu, Spin } from 'antd'
 import SvgIcon from '@/components/SvgIcon'
 import { getAsyncMenus } from '@/router/menus'
 import type { AppMenu } from '@/router/types'
+import { useConfigStore } from '@/store/config'
 import { useMenuStore } from '@/store/menu'
 import { getOpenKeys } from '@/utils/helper'
 
@@ -97,11 +98,14 @@ const LayoutMenu = () => {
   }
   // #endregion
 
+  const { theme } = useConfigStore()
+
   return (
     <div>
       <Spin spinning={loading} tip="Loading...">
         <Menu
-          theme="dark"
+          className="h-[100vh] overflow-y-auto"
+          theme={theme === 'dark' ? 'dark' : 'light'}
           mode="inline"
           triggerSubMenuAction="click"
           inlineIndent={20}

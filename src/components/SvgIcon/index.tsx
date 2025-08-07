@@ -6,6 +6,11 @@ export interface SvgIconProp {
   size?: number
   style?: React.CSSProperties
   className?: string
+  onClick?: (event: React.MouseEvent<SVGSVGElement>) => void
+  // title?: string
+  // role?: string
+  // tabIndex?: number
+  // onKeyDown?: (event: React.KeyboardEvent<SVGSVGElement>) => void
 }
 
 export default function SvgIcon({
@@ -14,6 +19,7 @@ export default function SvgIcon({
   size = 16,
   style,
   className,
+  onClick,
 }: SvgIconProp) {
   const symbolId = `#${prefix}-${name}`
   const iconStyle = {
@@ -27,6 +33,7 @@ export default function SvgIcon({
       className={`inline-block overflow-hidden fill-current align-[-0.15em] ${className ? className : ''}`}
       style={iconStyle}
       aria-hidden="true"
+      onClick={onClick}
     >
       <use href={symbolId} />
     </svg>

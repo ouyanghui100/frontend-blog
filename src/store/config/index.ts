@@ -5,13 +5,16 @@ interface configState {
   theme: ThemeType
 }
 
-export const useConfigStore = create<configState>((set) => ({
+interface configActions {
+  setTheme: (theme?: 'light' | 'dark') => void
+}
+
+export const useConfigStore = create<configState & configActions>((set) => ({
   theme: (getTheme() || 'light') as ThemeType,
-  setTheme: () =>
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    set((state: any) => {
-      const newValue = state.theme === 'light' ? 'dark' : 'light'
-      setTheme(newValue)
+  setTheme: (value?: 'light' | 'dark') =>
+    set((state) => {
+      const newValue = value ?? (state.theme === 'light' ? 'dark' : 'light')
+      setTheme(newValue) // 保持原有的副作用逻辑
       return { theme: newValue }
     }),
 }))

@@ -1,6 +1,8 @@
 import { Outlet, useLocation } from 'react-router-dom'
 import { Layout } from 'antd'
+import classNames from 'classnames'
 import { useTitle } from '@/hooks/useTitle'
+import { useConfigStore } from '@/store/config'
 import { useMenuStore } from '@/store/menu'
 import LayoutHeader from './header'
 import LayoutMenu from './menu'
@@ -14,13 +16,12 @@ export const BasicLayout = () => {
   const { collapsed } = useMenuStore()
 
   return (
-    <Layout className="layout_wrapper flex h-[100vh] w-full overflow-x-hidden">
-      <Sider
-        width={210}
-        trigger={null}
-        collapsed={collapsed}
-        className="h-[100vh]"
-      >
+    <Layout
+      className={classNames(
+        'layout_wrapper flex h-[100vh] w-full overflow-x-hidden'
+      )}
+    >
+      <Sider width={210} trigger={null} collapsed={collapsed}>
         <LayoutMenu />
       </Sider>
       <Layout>
