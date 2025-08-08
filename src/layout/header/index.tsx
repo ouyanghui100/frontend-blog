@@ -27,12 +27,14 @@ const LayoutHeader = () => {
             <SvgIcon
               name="dayTime"
               size={20}
+              className="cursor-pointer"
               onClick={() => setTheme('dark')}
             />
           ) : (
             <SvgIcon
               name="blackSky"
               size={20}
+              className="cursor-pointer"
               onClick={() => setTheme('light')}
             />
           )}
