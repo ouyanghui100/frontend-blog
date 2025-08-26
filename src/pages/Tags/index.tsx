@@ -18,6 +18,7 @@ const columns: TableProps<DataType>['columns'] = [
     title: '名称',
     dataIndex: 'name',
     key: 'name',
+    fixed: 'left',
   },
   {
     title: '使用次数',
@@ -56,6 +57,7 @@ const columns: TableProps<DataType>['columns'] = [
 ]
 
 const TagsPage: React.FC = () => {
+  // #region 获取表格数据
   const [loading, setLoading] = React.useState(false)
   const [rows, setRows] = React.useState<DataType[]>([])
   const [searchText, setSearchText] = React.useState('')
@@ -89,10 +91,12 @@ const TagsPage: React.FC = () => {
     [mapToRow]
   )
 
+  // 搜索
   const onSearch = React.useCallback(() => {
     fetchData(searchText.trim() || undefined)
   }, [fetchData, searchText])
 
+  // 重置
   const onReset = React.useCallback(() => {
     setSearchText('')
     fetchData(undefined)
@@ -101,7 +105,9 @@ const TagsPage: React.FC = () => {
   React.useEffect(() => {
     fetchData()
   }, [fetchData])
+  // #endregion
 
+  // #region 表格自适应滚动
   const wrapperRef = React.useRef<HTMLDivElement | null>(null)
   const toolbarRef = React.useRef<HTMLDivElement | null>(null)
   const [tableScrollY, setTableScrollY] = React.useState<number>()
@@ -118,7 +124,7 @@ const TagsPage: React.FC = () => {
       return y > 0 ? y : undefined
     }
 
-    const recalc = () => {
+    const reCalc = () => {
       const availableY = calcAvailableY()
       if (!availableY) {
         setTableScrollY(undefined)
@@ -137,7 +143,8 @@ const TagsPage: React.FC = () => {
       const paddingAllowance = 8
       const contentH = headH + bodyH + paddingAllowance
       if (contentH > availableY) {
-        setTableScrollY(availableY)
+        const bodyScrollableY = availableY - headH
+        setTableScrollY(bodyScrollableY > 0 ? bodyScrollableY : undefined)
       } else {
         setTableScrollY(undefined)
       }
@@ -145,17 +152,18 @@ const TagsPage: React.FC = () => {
 
     const ro = new ResizeObserver(() => {
       // 下一帧再量，确保 DOM 已更新
-      requestAnimationFrame(recalc)
+      requestAnimationFrame(reCalc)
     })
     if (wrapperRef.current) ro.observe(wrapperRef.current)
     if (toolbarRef.current) ro.observe(toolbarRef.current)
-    window.addEventListener('resize', recalc)
-    requestAnimationFrame(recalc)
+    window.addEventListener('resize', reCalc)
+    requestAnimationFrame(reCalc)
     return () => {
       ro.disconnect()
-      window.removeEventListener('resize', recalc)
+      window.removeEventListener('resize', reCalc)
     }
   }, [])
+  // #endregion
 
   return (
     <div className="h-full w-full">
@@ -166,7 +174,6 @@ const TagsPage: React.FC = () => {
           body: 'h-full',
         }}
       >
-        <Tag color="success">是</Tag>
         <div ref={wrapperRef} className="flex h-full flex-col">
           <div ref={toolbarRef} className="mb-4 flex items-center gap-2">
             <Input
