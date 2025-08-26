@@ -55,7 +55,7 @@ export default defineConfig({
         target,
         ws: true,
         changeOrigin: true,
-        rewrite: (path) => path,
+        rewrite: (path) => path.replace(/^\/api/, ''),
         secure: true,
         // debug: true,
         bypass: (req, res, options) => {

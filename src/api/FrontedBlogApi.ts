@@ -43,7 +43,7 @@ export interface CategoryStatistics {
 // 创建标签
 export const createTag = (data: { name: string; createdAt?: string }) =>
   http<Tag>({
-    url: '/v1/tags',
+    url: '/api/v1/tags',
     method: 'post',
     data,
   })
@@ -51,7 +51,7 @@ export const createTag = (data: { name: string; createdAt?: string }) =>
 // 获取标签列表
 export const getTags = (params?: { search?: string }) =>
   http<Tag[]>({
-    url: '/v1/tags',
+    url: '/api/v1/tags',
     method: 'get',
     params,
   })
@@ -59,7 +59,7 @@ export const getTags = (params?: { search?: string }) =>
 // 获取标签详情
 export const getTagDetail = (id: number) =>
   http<Tag>({
-    url: `/v1/tags/${id}`,
+    url: `/api/v1/tags/${id}`,
     method: 'get',
   })
 
@@ -70,7 +70,7 @@ export const updateTag = (data: {
   updatedAt?: string
 }) =>
   http<Tag>({
-    url: '/v1/tags',
+    url: '/api/v1/tags',
     method: 'patch',
     data,
   })
@@ -78,7 +78,7 @@ export const updateTag = (data: {
 // 删除标签
 export const deleteTag = (data: { id: number }) =>
   http<null>({
-    url: '/v1/tags',
+    url: '/api/v1/tags',
     method: 'delete',
     data,
   })
@@ -86,7 +86,7 @@ export const deleteTag = (data: { id: number }) =>
 // 获取热门标签
 export const getPopularTags = (params?: { minUsage?: number }) =>
   http<Tag[]>({
-    url: '/v1/tags/popular',
+    url: '/api/v1/tags/popular',
     method: 'get',
     params,
   })
@@ -95,7 +95,7 @@ export const getPopularTags = (params?: { minUsage?: number }) =>
 // 创建分类
 export const createCategory = (data: { name: string; createdAt?: string }) =>
   http<Category>({
-    url: '/v1/categories',
+    url: '/api/v1/categories',
     method: 'post',
     data,
   })
@@ -103,7 +103,7 @@ export const createCategory = (data: { name: string; createdAt?: string }) =>
 // 获取分类列表
 export const getCategories = (params?: { search?: string }) =>
   http<Category[]>({
-    url: '/v1/categories',
+    url: '/api/v1/categories',
     method: 'get',
     params,
   })
@@ -111,7 +111,7 @@ export const getCategories = (params?: { search?: string }) =>
 // 获取分类详情
 export const getCategoryDetail = (id: number) =>
   http<Category>({
-    url: `/v1/categories/${id}`,
+    url: `/api/v1/categories/${id}`,
     method: 'get',
   })
 
@@ -122,7 +122,7 @@ export const updateCategory = (data: {
   updatedAt?: string
 }) =>
   http<Category>({
-    url: '/v1/categories',
+    url: '/api/v1/categories',
     method: 'patch',
     data,
   })
@@ -130,7 +130,7 @@ export const updateCategory = (data: {
 // 删除分类
 export const deleteCategory = (data: { id: number }) =>
   http<null>({
-    url: '/v1/categories',
+    url: '/api/v1/categories',
     method: 'delete',
     data,
   })
@@ -138,7 +138,7 @@ export const deleteCategory = (data: { id: number }) =>
 // 获取热门分类
 export const getPopularCategories = (params?: { minArticles?: number }) =>
   http<Category[]>({
-    url: '/v1/categories/popular',
+    url: '/api/v1/categories/popular',
     method: 'get',
     params,
   })
@@ -146,21 +146,21 @@ export const getPopularCategories = (params?: { minArticles?: number }) =>
 // 获取分类统计信息
 export const getCategoryStatistics = () =>
   http<CategoryStatistics>({
-    url: '/v1/categories/statistics',
+    url: '/api/v1/categories/statistics',
     method: 'get',
   })
 
 // ========== 前台标签/分类接口 ==========
 export const getFrontendTags = (params?: { search?: string }) =>
   http<Tag[]>({
-    url: '/v1/frontend/tags',
+    url: '/api/v1/frontend/tags',
     method: 'get',
     params,
   })
 
 export const getFrontendPopularTags = (params?: { limit?: number }) =>
   http<Tag[]>({
-    url: '/v1/frontend/tags/popular',
+    url: '/api/v1/frontend/tags/popular',
     method: 'get',
     params,
   })
@@ -174,7 +174,7 @@ export const getFrontendCategories = (params?: { search?: string }) =>
 
 export const getFrontendPopularCategories = (params?: { limit?: number }) =>
   http<Category[]>({
-    url: '/v1/frontend/categories/popular',
+    url: '/api/v1/frontend/categories/popular',
     method: 'get',
     params,
   })
@@ -183,7 +183,7 @@ export const getFrontendPopularCategories = (params?: { limit?: number }) =>
 // 管理员登录
 export const adminLogin = (data: { username: string; password: string }) =>
   http<{ accessToken: string; user: User }>({
-    url: '/v1/auth/login',
+    url: '/api/v1/auth/login',
     method: 'post',
     data,
   })
@@ -191,20 +191,183 @@ export const adminLogin = (data: { username: string; password: string }) =>
 // 游客访问
 export const guestAccess = () =>
   http<{ accessToken: string; user: User }>({
-    url: '/v1/auth/guest',
+    url: '/api/v1/auth/guest',
     method: 'post',
   })
 
 // 获取当前用户信息
 export const getProfile = () =>
   http<User>({
-    url: '/v1/auth/profile',
+    url: '/api/v1/auth/profile',
     method: 'get',
   })
 
 // 检查认证状态
 export const checkAuth = () =>
   http<AuthCheck>({
-    url: '/v1/auth/check',
+    url: '/api/v1/auth/check',
+    method: 'get',
+  })
+
+// ========== 文章相关类型 ==========
+export interface Article {
+  id: number
+  title: string
+  summary: string
+  content: string
+  author: string
+  category: string
+  tags: string[]
+  status: 'draft' | 'published' | 'deleted'
+  publishedAt?: string | null
+  createdAt: string
+  updatedAt?: string | null
+}
+
+export interface Paginated<T> {
+  items: T[]
+  total: number
+  page: number
+  pageSize: number
+}
+
+// ========== 文章相关接口 ==========
+export const createArticle = (data: {
+  title: string
+  summary: string
+  content: string
+  author: string
+  category: string
+  tags: string[]
+  status: 'draft' | 'published' | 'deleted'
+  publishedAt?: string | null
+}) =>
+  http<Article>({
+    url: '/api/v1/articles',
+    method: 'post',
+    data,
+  })
+
+export const getArticles = (params?: {
+  page?: number
+  pageSize?: number
+  search?: string
+  categoryId?: number
+  status?: 'draft' | 'published' | 'deleted'
+}) =>
+  http<Paginated<Article>>({
+    url: '/api/v1/articles',
+    method: 'get',
+    params,
+  })
+
+export const getArticleDetail = (id: number) =>
+  http<Article>({
+    url: `/api/v1/articles/${id}`,
+    method: 'get',
+  })
+
+export const updateArticle = (data: {
+  id: number
+  title?: string
+  summary?: string
+  content?: string
+  author?: string
+  category?: string
+  tags?: string[]
+  status?: 'draft' | 'published' | 'deleted'
+  publishedAt?: string | null
+}) =>
+  http<Article>({
+    url: '/api/v1/articles',
+    method: 'patch',
+    data,
+  })
+
+export const deleteArticle = (data: { id: number }) =>
+  http<null>({
+    url: '/api/v1/articles',
+    method: 'delete',
+    data,
+  })
+
+export const getArticlesByCategory = (
+  categoryId: number,
+  params?: {
+    page?: number
+    pageSize?: number
+    search?: string
+    status?: 'draft' | 'published' | 'deleted'
+  }
+) =>
+  http<Paginated<Article>>({
+    url: `/api/v1/articles/by-category/{categoryId}`,
+    method: 'get',
+    params: { ...params, categoryId },
+  })
+
+export const getArticlesByTag = (
+  tagId: number,
+  params?: {
+    page?: number
+    pageSize?: number
+    search?: string
+    categoryId?: number
+    status?: 'draft' | 'published' | 'deleted'
+  }
+) =>
+  http<Paginated<Article>>({
+    url: `/api/v1/articles/by-tag/{tagId}`,
+    method: 'get',
+    params: { ...params, tagId },
+  })
+
+// ========== 前台文章与统计接口 ==========
+export const getFrontendArticles = (params?: {
+  categoryId?: number
+  search?: string
+  pageSize?: number
+  page?: number
+}) =>
+  http<Paginated<Article>>({
+    url: '/api/v1/frontend/articles',
+    method: 'get',
+    params,
+  })
+
+export const getFrontendArticlesByCategory = (params: {
+  categoryId: number
+  search?: string
+  pageSize?: number
+  page?: number
+}) =>
+  http<Paginated<Article>>({
+    url: '/api/v1/frontend/articles/by-category',
+    method: 'get',
+    params,
+  })
+
+export const getFrontendArticlesByTag = (params: {
+  tagId: number
+  search?: string
+  pageSize?: number
+  page?: number
+}) =>
+  http<Paginated<Article>>({
+    url: '/api/v1/frontend/articles/by-tag',
+    method: 'get',
+    params,
+  })
+
+export const updateFrontendArticleView = (data: { id: number }) =>
+  http<Article>({
+    url: '/api/v1/frontend/articles/view',
+    method: 'post',
+    data,
+  })
+
+export const getFrontendCategoryStatistics = () =>
+  http<Array<{ id: number; name: string; articleCount: number }>>({
+    url: '/api/v1/frontend/categories/statistics',
     method: 'get',
   })
