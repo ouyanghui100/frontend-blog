@@ -19,7 +19,7 @@ const TagsRoute: RouteObject = {
     {
       path: '',
       name: 'TagsPage',
-      element: LazyLoad(lazy(() => import('@/pages/Tags'))),
+      element: LazyLoad(lazy(() => import('@/pages/Tags/index'))),
       meta: {
         title: '标签',
         key: 'tags',
