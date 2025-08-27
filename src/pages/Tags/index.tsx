@@ -94,7 +94,7 @@ const TagsPage: React.FC = () => {
             编辑
           </PermissionButton>
           <Popconfirm
-            title={`确认删除【${record.name}】吗？`}
+            title={`确认删除标签【${record.name}】吗？`}
             onConfirm={() => handleDelete(Number(record.key))}
             okButtonProps={deleteLoading}
           >
