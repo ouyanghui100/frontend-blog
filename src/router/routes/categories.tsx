@@ -5,26 +5,26 @@ import type { RouteObject } from '../types'
 
 // Home route
 const TagsRoute: RouteObject = {
-  path: '/tags',
-  name: 'Tags',
+  path: '/categories',
+  name: 'Categories',
   element: <LayoutGuard />,
   meta: {
-    title: '标签',
-    icon: 'tags',
+    title: '分类',
+    icon: 'categories',
     affix: true,
-    orderNo: 2,
+    orderNo: 3,
     hideChildrenInMenu: true,
   },
   children: [
     {
       path: '',
-      name: 'TagsPage',
-      element: LazyLoad(lazy(() => import('@/pages/Tags/index'))),
+      name: 'CategoriesPage',
+      element: LazyLoad(lazy(() => import('@/pages/Categories/index'))),
       meta: {
-        title: '标签',
-        key: 'tags',
-        icon: 'tags',
-        orderNo: 2,
+        title: '分类',
+        key: 'categories',
+        icon: 'categories',
+        orderNo: 3,
         hideMenu: true,
       },
     },
