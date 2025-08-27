@@ -13,6 +13,7 @@ import {
 import { frontedBlogApi } from '@/api'
 import type { Tag as TagType } from '@/api/frontedBlogApi'
 import { PermissionButton } from '@/components/HOC/PermissionButton'
+import AddOrEditModal from '../Home/components/AddOrEditModal'
 
 interface DataType {
   key: string
@@ -21,7 +22,7 @@ interface DataType {
   createdAt: string
   updatedAt: string
   lastUsedAt: string
-  isPopular: boolean | undefined
+  isPopular: boolean
 }
 
 const TagsPage: React.FC = () => {
@@ -83,7 +84,12 @@ const TagsPage: React.FC = () => {
           <PermissionButton
             color="primary"
             variant="text"
-            onClick={() => console.log(_, record, 'sssss')}
+            onClick={() =>
+              setEditModal({
+                visible: true,
+                data: { ...record, id: Number(record.key) },
+              })
+            }
           >
             编辑
           </PermissionButton>
@@ -150,6 +156,36 @@ const TagsPage: React.FC = () => {
   React.useEffect(() => {
     fetchData()
   }, [fetchData])
+  // #endregion
+
+  // #region 编辑/新增
+  const [editModal, setEditModal] = React.useState<{
+    visible: boolean
+    data: TagType | null
+    isAdd?: boolean
+  }>({ visible: false, data: null, isAdd: false })
+  const [editLoading, setEditLoading] = React.useState(false)
+
+  // 编辑/新增弹窗提交
+  const handleEditSubmit = async (name: string) => {
+    setEditLoading(true)
+    try {
+      if (editModal.isAdd) {
+        await frontedBlogApi.createTag({ name })
+        message.success('标签新增成功')
+        fetchData()
+      } else {
+        await frontedBlogApi.updateTag({ id: editModal.data!.id, name })
+        message.success('标签编辑成功')
+        fetchData()
+      }
+      setEditModal({ visible: false, data: null, isAdd: false })
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setEditLoading(false)
+    }
+  }
   // #endregion
 
   // #region 删除
@@ -258,7 +294,17 @@ const TagsPage: React.FC = () => {
                 </Button>
               </Space>
             </div>
-            <PermissionButton color="primary" variant="solid">
+            <PermissionButton
+              color="primary"
+              variant="solid"
+              onClick={() =>
+                setEditModal({
+                  visible: true,
+                  data: null,
+                  isAdd: true,
+                })
+              }
+            >
               新增
             </PermissionButton>
           </div>
@@ -272,6 +318,16 @@ const TagsPage: React.FC = () => {
           />
         </div>
       </Card>
+      <AddOrEditModal
+        open={editModal.visible}
+        title={editModal.isAdd ? '新增标签' : '编辑标签'}
+        initialName={editModal.data?.name}
+        loading={editLoading}
+        onOk={handleEditSubmit}
+        onCancel={() =>
+          setEditModal({ visible: false, data: null, isAdd: false })
+        }
+      />
     </div>
   )
 }

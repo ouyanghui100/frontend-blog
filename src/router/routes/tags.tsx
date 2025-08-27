@@ -10,7 +10,7 @@ const TagsRoute: RouteObject = {
   element: <LayoutGuard />,
   meta: {
     title: '标签',
-    icon: 'home',
+    icon: 'tags',
     affix: true,
     orderNo: 1,
     hideChildrenInMenu: true,
@@ -23,7 +23,7 @@ const TagsRoute: RouteObject = {
       meta: {
         title: '标签',
         key: 'tags',
-        icon: 'home',
+        icon: 'tags',
         orderNo: 1,
         hideMenu: true,
       },
