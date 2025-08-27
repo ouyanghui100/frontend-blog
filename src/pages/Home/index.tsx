@@ -4,8 +4,8 @@ import type { EChartsOption } from 'echarts'
 import { frontedBlogApi } from '@/api'
 import type { Category, Tag } from '@/api/frontedBlogApi'
 import ChartsCard from '@/components/ChartsCard'
-import { PermissionButton, type Role } from '@/components/HOC/PermissionButton'
-import { useUserStore } from '@/store/user'
+import { PermissionButton } from '@/components/HOC/PermissionButton'
+// import { useUserStore } from '@/store/user'
 import { messageBox } from '@/utils/messageBox'
 import AddOrEditModal from './components/AddOrEditModal'
 import CountUpCard from './components/CountUpCard'
@@ -88,7 +88,7 @@ export const pieOptions: EChartsOption = {
 }
 
 const HomePage: React.FC = () => {
-  const { userInfo } = useUserStore()
+  // const { userInfo } = useUserStore()
   const [isCategoriesLoading, setIsCategoriesLoading] = React.useState(true)
   const [isTagsLoading, setIsTagsLoading] = React.useState(true)
 
@@ -233,7 +233,6 @@ const HomePage: React.FC = () => {
                 <span className="text-[20px] font-[600]">分类</span>
                 <PermissionButton
                   type="primary"
-                  role={userInfo?.role as Role | undefined}
                   onClick={() =>
                     setEditModal({
                       visible: true,
@@ -268,7 +267,6 @@ const HomePage: React.FC = () => {
                             <div className="flex items-center gap-1">
                               <PermissionButton
                                 color="primary"
-                                role={userInfo?.role as Role | undefined}
                                 variant="text"
                                 onClick={() =>
                                   setEditModal({
@@ -282,7 +280,6 @@ const HomePage: React.FC = () => {
                               </PermissionButton>
                               <PermissionButton
                                 type="text"
-                                role={userInfo?.role as Role | undefined}
                                 danger
                                 loading={
                                   deleteLoading?.type === 'category' &&
@@ -316,7 +313,6 @@ const HomePage: React.FC = () => {
               <div className="flex justify-between">
                 <span className="text-[20px] font-[600]">标签</span>
                 <PermissionButton
-                  role={userInfo?.role as Role | undefined}
                   type="primary"
                   onClick={() =>
                     setEditModal({
@@ -351,7 +347,6 @@ const HomePage: React.FC = () => {
                             <div>{item.name}</div>
                             <div className="flex items-center gap-1">
                               <PermissionButton
-                                role={userInfo?.role as Role | undefined}
                                 color="primary"
                                 variant="text"
                                 onClick={() =>
@@ -366,7 +361,6 @@ const HomePage: React.FC = () => {
                               </PermissionButton>
                               <PermissionButton
                                 type="text"
-                                role={userInfo?.role as Role | undefined}
                                 danger
                                 loading={
                                   deleteLoading?.type === 'tag' &&

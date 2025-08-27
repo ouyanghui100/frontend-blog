@@ -1,7 +1,18 @@
 import React from 'react'
-import { Button, Card, Input, Space, Table, type TableProps, Tag } from 'antd'
+import {
+  Button,
+  Card,
+  Input,
+  message,
+  Popconfirm,
+  Space,
+  Table,
+  type TableProps,
+  Tag,
+} from 'antd'
 import { frontedBlogApi } from '@/api'
 import type { Tag as TagType } from '@/api/frontedBlogApi'
+import { PermissionButton } from '@/components/HOC/PermissionButton'
 
 interface DataType {
   key: string
@@ -13,57 +24,84 @@ interface DataType {
   isPopular: boolean | undefined
 }
 
-const columns: TableProps<DataType>['columns'] = [
-  {
-    title: '名称',
-    dataIndex: 'name',
-    key: 'name',
-    fixed: 'left',
-  },
-  {
-    title: '使用次数',
-    dataIndex: 'usageCount',
-    key: 'usageCount',
-  },
-  {
-    title: '创建时间',
-    dataIndex: 'createdAt',
-    key: 'createdAt',
-  },
-  {
-    title: '更新时间',
-    dataIndex: 'updatedAt',
-    key: 'updatedAt',
-  },
-  {
-    title: '最近一次使用时间',
-    dataIndex: 'lastUsedAt',
-    key: 'lastUsedAt',
-  },
-  {
-    title: '是否流行',
-    dataIndex: 'isPopular',
-    key: 'isPopular',
-    // 不能这样 必须返回一个实际的 DOM 元素或者组件，而不是一个 Fragment。
-    // render: (isPopular: boolean) => (
-    //   <>
-    //     {isPopular ? (
-    //       <Tag color="success">是</Tag>
-    //     ) : (
-    //       <Tag color="processing">否</Tag>
-    //     )}
-    //   </>
-    // ),
-    render: (isPopular: boolean) =>
-      isPopular ? (
-        <Tag color="success">是</Tag>
-      ) : (
-        <Tag color="processing">否</Tag>
-      ),
-  },
-]
-
 const TagsPage: React.FC = () => {
+  // #region 表单结构
+  const columns: TableProps<DataType>['columns'] = [
+    {
+      title: '名称',
+      dataIndex: 'name',
+      key: 'name',
+      fixed: 'left',
+    },
+    {
+      title: '使用次数',
+      dataIndex: 'usageCount',
+      key: 'usageCount',
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+    },
+    {
+      title: '更新时间',
+      dataIndex: 'updatedAt',
+      key: 'updatedAt',
+    },
+    {
+      title: '最近一次使用时间',
+      dataIndex: 'lastUsedAt',
+      key: 'lastUsedAt',
+    },
+    {
+      title: '是否流行',
+      dataIndex: 'isPopular',
+      key: 'isPopular',
+      // 不能这样 必须返回一个实际的 DOM 元素或者组件，而不是一个 Fragment。
+      // render: (isPopular: boolean) => (
+      //   <>
+      //     {isPopular ? (
+      //       <Tag color="success">是</Tag>
+      //     ) : (
+      //       <Tag color="processing">否</Tag>
+      //     )}
+      //   </>
+      // ),
+      render: (isPopular: boolean) =>
+        isPopular ? (
+          <Tag color="success">是</Tag>
+        ) : (
+          <Tag color="processing">否</Tag>
+        ),
+    },
+    {
+      title: '操作',
+      key: 'action',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      render: (_: any, record: DataType) => (
+        <Space size="middle">
+          <PermissionButton
+            color="primary"
+            variant="text"
+            onClick={() => console.log(_, record, 'sssss')}
+          >
+            编辑
+          </PermissionButton>
+          <Popconfirm
+            title={`确认删除【${record.name}】吗？`}
+            onConfirm={() => handleDelete(Number(record.key))}
+            okButtonProps={deleteLoading}
+          >
+            <PermissionButton color="danger" variant="text">
+              删除
+            </PermissionButton>
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ]
+  // #endregion
+
   // #region 获取表格数据
   const [loading, setLoading] = React.useState(false)
   const [rows, setRows] = React.useState<DataType[]>([])
@@ -112,6 +150,17 @@ const TagsPage: React.FC = () => {
   React.useEffect(() => {
     fetchData()
   }, [fetchData])
+  // #endregion
+
+  // #region 删除
+  const [deleteLoading, setDeleteLoading] = React.useState<boolean>(false)
+  const handleDelete = async (id: number) => {
+    setDeleteLoading(true)
+    await frontedBlogApi.deleteTag({ id })
+    setDeleteLoading(false)
+    message.success('标签删除成功')
+    await fetchData()
+  }
   // #endregion
 
   // #region 表格自适应滚动
@@ -181,25 +230,37 @@ const TagsPage: React.FC = () => {
           body: 'h-full',
         }}
       >
-        <Tag color="success">是</Tag>
         <div ref={wrapperRef} className="flex h-full flex-col">
-          <div ref={toolbarRef} className="mb-4 flex items-center gap-2">
-            <Input
-              placeholder="请输入标签名称"
-              allowClear
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-              onPressEnter={onSearch}
-              className="max-w-72"
-            />
-            <Space>
-              <Button type="primary" onClick={onSearch} loading={loading}>
-                搜索
-              </Button>
-              <Button onClick={onReset} disabled={loading}>
-                重置
-              </Button>
-            </Space>
+          <div
+            ref={toolbarRef}
+            className="mb-4 flex items-center justify-between"
+          >
+            <div className="flex items-center gap-2">
+              <Input
+                placeholder="请输入标签名称"
+                allowClear
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                onPressEnter={onSearch}
+                className="max-w-72"
+              />
+              <Space>
+                <Button
+                  color="primary"
+                  variant="outlined"
+                  onClick={onSearch}
+                  loading={loading}
+                >
+                  搜索
+                </Button>
+                <Button onClick={onReset} disabled={loading}>
+                  重置
+                </Button>
+              </Space>
+            </div>
+            <PermissionButton color="primary" variant="solid">
+              新增
+            </PermissionButton>
           </div>
           <Table<DataType>
             bordered

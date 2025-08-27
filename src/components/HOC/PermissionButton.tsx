@@ -1,6 +1,7 @@
 // PermissionButton.tsx
 import React from 'react'
 import { Button, type ButtonProps, message } from 'antd'
+import { useUserStore } from '@/store/user'
 
 interface PermissionButtonProps extends ButtonProps {
   tooltipWhenDenied?: string
@@ -27,7 +28,8 @@ export const PermissionButton: React.FC<PermissionButtonProps> = ({
   role,
   ...rest
 }) => {
-  const { can } = getPermission(role)
+  const { userInfo } = useUserStore()
+  const { can } = getPermission(role ?? (userInfo?.role as Role | undefined))
 
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     if (!can) {
