@@ -10,7 +10,7 @@ interface DataType {
   createdAt: string
   updatedAt: string
   lastUsedAt: string
-  isPopular: boolean
+  isPopular: boolean | undefined
 }
 
 const columns: TableProps<DataType>['columns'] = [
@@ -36,7 +36,7 @@ const columns: TableProps<DataType>['columns'] = [
     key: 'updatedAt',
   },
   {
-    title: '最后一次使用时间',
+    title: '最近一次使用时间',
     dataIndex: 'lastUsedAt',
     key: 'lastUsedAt',
   },
@@ -44,15 +44,22 @@ const columns: TableProps<DataType>['columns'] = [
     title: '是否流行',
     dataIndex: 'isPopular',
     key: 'isPopular',
-    render: (isPopular: boolean) => (
-      <>
-        {isPopular ? (
-          <Tag color="success">是</Tag>
-        ) : (
-          <Tag color="primary">否</Tag>
-        )}
-      </>
-    ),
+    // 不能这样 必须返回一个实际的 DOM 元素或者组件，而不是一个 Fragment。
+    // render: (isPopular: boolean) => (
+    //   <>
+    //     {isPopular ? (
+    //       <Tag color="success">是</Tag>
+    //     ) : (
+    //       <Tag color="processing">否</Tag>
+    //     )}
+    //   </>
+    // ),
+    render: (isPopular: boolean) =>
+      isPopular ? (
+        <Tag color="success">是</Tag>
+      ) : (
+        <Tag color="processing">否</Tag>
+      ),
   },
 ]
 
@@ -174,6 +181,7 @@ const TagsPage: React.FC = () => {
           body: 'h-full',
         }}
       >
+        <Tag color="success">是</Tag>
         <div ref={wrapperRef} className="flex h-full flex-col">
           <div ref={toolbarRef} className="mb-4 flex items-center gap-2">
             <Input
@@ -195,7 +203,6 @@ const TagsPage: React.FC = () => {
           </div>
           <Table<DataType>
             bordered
-            rowKey="id"
             loading={loading}
             columns={columns}
             dataSource={rows}

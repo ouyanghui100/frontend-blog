@@ -10,9 +10,6 @@ const target = 'http://localhost:3000'
 
 // https://vite.dev/config/
 export default defineConfig({
-  optimizeDeps: {
-    include: ['react-is'],
-  },
   plugins: [
     reactPlugin,
     tailwindcss(),
