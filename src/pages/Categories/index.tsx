@@ -165,7 +165,7 @@ const CategoriesPage: React.FC = () => {
   const [deleteLoading, setDeleteLoading] = React.useState<boolean>(false)
   const handleDelete = async (id: number) => {
     setDeleteLoading(true)
-    await frontedBlogApi.deleteTag({ id })
+    await frontedBlogApi.deleteCategory({ id })
     setDeleteLoading(false)
     message.success('分类删除成功')
     await fetchData()
