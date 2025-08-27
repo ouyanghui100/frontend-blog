@@ -143,8 +143,11 @@ const TagsPage: React.FC = () => {
   )
 
   // 搜索
+  const [searchLoading, setSearchLoading] = React.useState<boolean>(false)
   const onSearch = React.useCallback(() => {
+    setSearchLoading(true)
     fetchData(searchText.trim() || undefined)
+    setSearchLoading(false)
   }, [fetchData, searchText])
 
   // 重置
@@ -285,11 +288,11 @@ const TagsPage: React.FC = () => {
                   color="primary"
                   variant="outlined"
                   onClick={onSearch}
-                  loading={loading}
+                  loading={searchLoading}
                 >
                   搜索
                 </Button>
-                <Button onClick={onReset} disabled={loading}>
+                <Button onClick={onReset} disabled={loading || searchLoading}>
                   重置
                 </Button>
               </Space>
