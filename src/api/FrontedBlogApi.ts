@@ -276,8 +276,9 @@ export const updateArticle = (data: {
   summary?: string
   content?: string
   authorId?: number
-  category?: string
-  tags?: string[]
+  category?: number
+  tags?: number[]
+  isRecommend?: boolean
   status?: 'draft' | 'published' | 'deleted'
   publishedAt?: string | null
 }) =>

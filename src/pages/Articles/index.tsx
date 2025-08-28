@@ -13,6 +13,7 @@ import {
   type TableProps,
   Tag,
 } from 'antd'
+import dayjs from 'dayjs'
 import { frontedBlogApi } from '@/api'
 import { StatusTypeEnum } from '@/api/enums'
 import { TAG_COLOR_LIST } from '@/api/enums'
@@ -86,7 +87,33 @@ const ArticlesPage = () => {
       title: '主动推荐',
       dataIndex: 'isRecommend',
       key: 'isRecommend',
-      render: (isRecommend: boolean) => <Switch checked={!!isRecommend} />,
+      render: (isRecommend: boolean, record) => (
+        <Switch
+          checked={!!isRecommend}
+          onChange={async (checked) => {
+            // 更新数据源中的对应行
+            const newData = rows.map((item) => {
+              if (item.key === record.key) {
+                return { ...item, isRecommend: checked }
+              }
+              return item
+            })
+            setRows(newData)
+            await frontedBlogApi.updateArticle({
+              ...record,
+              id: Number(record.key),
+              category: categoryOptions.find((v) => v.label === record.category)
+                ?.value,
+              tags:
+                (record.tags?.map(
+                  (tag) => tagOptions.find((v) => v.label === tag)?.value
+                ) as number[]) || ([] as number[]),
+              isRecommend: checked,
+              publishedAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+            })
+          }}
+        />
+      ),
     },
     {
       title: '是否推荐',
