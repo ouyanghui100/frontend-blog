@@ -3,26 +3,39 @@ import {
   Button,
   Card,
   Input,
-  message,
-  Popconfirm,
+  Select,
   Space,
+  Switch,
   Table,
   type TableProps,
   Tag,
 } from 'antd'
 import { frontedBlogApi } from '@/api'
-import type { Tag as TagType } from '@/api/frontedBlogApi'
+import { StatusTypeEnum } from '@/api/enums'
+import { TAG_COLOR_LIST } from '@/api/enums'
+import type {
+  Category as CategoryType,
+  Tag as TagType,
+} from '@/api/frontedBlogApi'
 import { PermissionButton } from '@/components/HOC/PermissionButton'
-import AddOrEditModal from '../Home/components/AddOrEditModal'
 
+type StatusType = 'draft' | 'published' | 'deleted'
 interface DataType {
   key: string
-  name: string
-  usageCount: number
+  title: string
+  summary: string
+  author: string
+  category: string
+  tags: string[]
+  viewCount: number
+  // 是否主动推荐
+  isRecommend: boolean
+  // 是否推荐
+  isFeatured: boolean
+  status: StatusType
   createdAt: string
-  updatedAt: string
-  lastUsedAt: string
-  isPopular: boolean
+  updatedAt?: string | null
+  publishedAt?: string | null
 }
 
 const ArticlesPage = () => {
@@ -30,14 +43,82 @@ const ArticlesPage = () => {
   const columns: TableProps<DataType>['columns'] = [
     {
       title: '名称',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'title',
+      key: 'title',
       fixed: 'left',
     },
     {
-      title: '使用次数',
-      dataIndex: 'usageCount',
-      key: 'usageCount',
+      title: '摘要',
+      dataIndex: 'summary',
+      key: 'summary',
+    },
+    {
+      title: '作者',
+      dataIndex: 'author',
+      key: 'author',
+    },
+    {
+      title: '分类',
+      dataIndex: 'category',
+      key: 'category',
+    },
+    {
+      title: '标签',
+      dataIndex: 'tags',
+      key: 'tags',
+      render: (tags: string[]) => (
+        <>
+          {tags.map((tag, idx) => {
+            const color = TAG_COLOR_LIST[idx % TAG_COLOR_LIST.length]
+            return (
+              <Tag color={color} key={`${tag}-${idx}`}>
+                {tag}
+              </Tag>
+            )
+          })}
+        </>
+      ),
+    },
+    {
+      title: '浏览次数',
+      dataIndex: 'viewCount',
+      key: 'viewCount',
+    },
+    {
+      title: '主动推荐',
+      dataIndex: 'isRecommend',
+      key: 'isRecommend',
+      render: (isRecommend: boolean) => <Switch checked={!!isRecommend} />,
+    },
+    {
+      title: '是否推荐',
+      dataIndex: 'isFeatured',
+      key: 'isFeatured',
+      render: (isFeatured: boolean, record) =>
+        !!record.isRecommend || !!isFeatured ? (
+          <Tag color="success">是</Tag>
+        ) : (
+          <Tag color="error">否</Tag>
+        ),
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: (status: StatusType) => {
+        const labelMap: Record<StatusType, string> = {
+          published: '已发布',
+          draft: '草稿',
+          deleted: '已删除',
+        }
+        const color =
+          status === StatusTypeEnum['已发布']
+            ? 'success'
+            : status === StatusTypeEnum['草稿']
+              ? 'processing'
+              : 'error'
+        return <Tag color={color}>{labelMap[status]}</Tag>
+      },
     },
     {
       title: '创建时间',
@@ -50,156 +131,171 @@ const ArticlesPage = () => {
       key: 'updatedAt',
     },
     {
-      title: '最近一次使用时间',
-      dataIndex: 'lastUsedAt',
-      key: 'lastUsedAt',
-    },
-    {
-      title: '是否流行',
-      dataIndex: 'isPopular',
-      key: 'isPopular',
-      // 不能这样 必须返回一个实际的 DOM 元素或者组件，而不是一个 Fragment。
-      // render: (isPopular: boolean) => (
-      //   <>
-      //     {isPopular ? (
-      //       <Tag color="success">是</Tag>
-      //     ) : (
-      //       <Tag color="processing">否</Tag>
-      //     )}
-      //   </>
-      // ),
-      render: (isPopular: boolean) =>
-        isPopular ? (
-          <Tag color="success">是</Tag>
-        ) : (
-          <Tag color="processing">否</Tag>
-        ),
+      title: '发布时间',
+      dataIndex: 'publishedAt',
+      key: 'publishedAt',
     },
     {
       title: '操作',
       key: 'action',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      render: (_: any, record: DataType) => (
+      render: (_: any, _record: DataType) => (
         <Space size="middle">
-          <PermissionButton
-            color="primary"
-            variant="text"
-            onClick={() =>
-              setEditModal({
-                visible: true,
-                data: { ...record, id: Number(record.key) },
-              })
-            }
-          >
+          {/* 确认时拦截，让别人预览一下 */}
+          <Button color="primary" variant="text">
             编辑
-          </PermissionButton>
-          <Popconfirm
+          </Button>
+          {/* <Popconfirm
             title={`确认删除标签【${record.name}】吗？`}
             onConfirm={() => handleDelete(Number(record.key))}
             okButtonProps={{ loading: deleteLoading }}
-          >
-            <PermissionButton color="danger" variant="text">
-              删除
-            </PermissionButton>
-          </Popconfirm>
+          > */}
+          <PermissionButton color="danger" variant="text">
+            删除
+          </PermissionButton>
+          {/* </Popconfirm> */}
         </Space>
       ),
     },
   ]
   // #endregion
 
-  // #region 获取表格数据
+  // #region 获取表格数据 & 筛选
   const [loading, setLoading] = React.useState(false)
   const [rows, setRows] = React.useState<DataType[]>([])
   const [searchText, setSearchText] = React.useState('')
+  const [selectedTagId, setSelectedTagId] = React.useState<number | undefined>(
+    undefined
+  )
+  const [selectedCategoryId, setSelectedCategoryId] = React.useState<
+    number | undefined
+  >(undefined)
+  const [selectedStatus, setSelectedStatus] = React.useState<
+    StatusType | undefined
+  >(undefined)
 
-  const mapToRow = React.useCallback((item: TagType): DataType => {
-    return {
-      key: String(item.id),
-      name: item.name,
-      usageCount: item.usageCount,
-      createdAt: item.createdAt,
-      updatedAt: item.updatedAt ?? '-',
-      lastUsedAt: item.lastUsedAt ?? '-',
-      isPopular: item.isPopular,
+  const [tagOptions, setTagOptions] = React.useState<
+    Array<{ label: string; value: number }>
+  >([])
+  const [categoryOptions, setCategoryOptions] = React.useState<
+    Array<{ label: string; value: number }>
+  >([])
+
+  const fetchFilters = React.useCallback(async () => {
+    try {
+      const [tags, categories] = await Promise.all([
+        frontedBlogApi.getTags(),
+        frontedBlogApi.getCategories(),
+      ])
+      setTagOptions(
+        (tags ?? []).map((t: TagType) => ({ label: t.name, value: t.id }))
+      )
+      setCategoryOptions(
+        (categories ?? []).map((c: CategoryType) => ({
+          label: c.name,
+          value: c.id,
+        }))
+      )
+    } catch {
+      // 错误提示已在 http 拦截器中统一处理
     }
   }, [])
 
-  const fetchData = React.useCallback(
-    async (search?: string) => {
-      try {
-        setLoading(true)
-        const list = await frontedBlogApi.getTags(
-          search ? { search } : undefined
-        )
-        setRows((list ?? []).map(mapToRow))
-      } catch {
-        // 错误提示已在 http 拦截器中统一处理
-      } finally {
-        setLoading(false)
-      }
-    },
-    [mapToRow]
-  )
+  const fetchData = React.useCallback(async () => {
+    try {
+      setLoading(true)
+      const res = await frontedBlogApi.getArticles({
+        search: searchText.trim() || undefined,
+        tagId: selectedTagId,
+        categoryId: selectedCategoryId,
+        status: selectedStatus,
+      })
+      const items = res?.items ?? []
+      const mapped: DataType[] = items.map((a) => ({
+        key: String(a.id),
+        title: a.title,
+        summary: a.summary,
+        author: a.author,
+        category: a.category,
+        tags: a.tags,
+        viewCount: a.viewCount,
+        isRecommend: a.isRecommend,
+        isFeatured: a.isFeatured,
+        status: a.status as StatusType,
+        createdAt: a.createdAt,
+        updatedAt: a.updatedAt ?? null,
+        publishedAt: a.publishedAt ?? null,
+      }))
+      setRows(mapped)
+    } catch {
+      // 错误提示已在 http 拦截器中统一处理
+    } finally {
+      setLoading(false)
+    }
+  }, [searchText, selectedTagId, selectedCategoryId, selectedStatus])
 
   // 搜索
   const [searchLoading, setSearchLoading] = React.useState<boolean>(false)
   const onSearch = React.useCallback(() => {
     setSearchLoading(true)
-    fetchData(searchText.trim() || undefined)
+    fetchData()
     setSearchLoading(false)
-  }, [fetchData, searchText])
+  }, [fetchData])
 
   // 重置
   const onReset = React.useCallback(() => {
     setSearchText('')
-    fetchData(undefined)
+    setSelectedTagId(undefined)
+    setSelectedCategoryId(undefined)
+    setSelectedStatus(undefined)
+    fetchData()
   }, [fetchData])
 
   React.useEffect(() => {
+    fetchFilters()
     fetchData()
-  }, [fetchData])
+  }, [fetchFilters, fetchData])
   // #endregion
 
   // #region 编辑/新增
-  const [editModal, setEditModal] = React.useState<{
-    visible: boolean
-    data: TagType | null
-    isAdd?: boolean
-  }>({ visible: false, data: null, isAdd: false })
-  const [editLoading, setEditLoading] = React.useState(false)
+  // const [editModal, setEditModal] = React.useState<{
+  //   visible: boolean
+  //   data: TagType | null
+  //   isAdd?: boolean
+  // }>({ visible: false, data: null, isAdd: false })
+  // const [editLoading, setEditLoading] = React.useState(false)
 
   // 编辑/新增弹窗提交
-  const handleEditSubmit = async (name: string) => {
-    setEditLoading(true)
-    try {
-      if (editModal.isAdd) {
-        await frontedBlogApi.createTag({ name })
-        message.success('标签新增成功')
-        fetchData()
-      } else {
-        await frontedBlogApi.updateTag({ id: editModal.data!.id, name })
-        message.success('标签编辑成功')
-        fetchData()
-      }
-      setEditModal({ visible: false, data: null, isAdd: false })
-    } catch (err) {
-      console.log(err)
-    } finally {
-      setEditLoading(false)
-    }
-  }
+  // const handleEditSubmit = async (name: string) => {
+  //   setEditLoading(true)
+  //   try {
+  //     if (editModal.isAdd) {
+  //       await frontedBlogApi.createTag({ name })
+  //       message.success('标签新增成功')
+  //       fetchData()
+  //     } else {
+  //       await frontedBlogApi.updateTag({ id: editModal.data!.id, name })
+  //       message.success('标签编辑成功')
+  //       fetchData()
+  //     }
+  //     setEditModal({ visible: false, data: null, isAdd: false })
+  //   } catch (err) {
+  //     console.log(err)
+  //   } finally {
+  //     setEditLoading(false)
+  //   }
+  // }
   // #endregion
 
   // #region 删除
-  const [deleteLoading, setDeleteLoading] = React.useState<boolean>(false)
-  const handleDelete = async (id: number) => {
-    setDeleteLoading(true)
-    await frontedBlogApi.deleteTag({ id })
-    setDeleteLoading(false)
-    message.success('标签删除成功')
-    await fetchData()
-  }
+  // const [deleteLoading, setDeleteLoading] = React.useState<boolean>(false)
+  // const handleDelete = async (id: number) => {
+  //   setDeleteLoading(true)
+  //   await frontedBlogApi.deleteTag({ id })
+  //   setDeleteLoading(false)
+  //   message.success('标签删除成功')
+  //   await fetchData()
+  // }
   // #endregion
 
   // #region 表格自适应滚动
@@ -276,12 +372,40 @@ const ArticlesPage = () => {
           >
             <div className="flex items-center gap-2">
               <Input
-                placeholder="请输入标签名称"
+                placeholder="请输入文章标题"
                 allowClear
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
                 onPressEnter={onSearch}
                 className="max-w-72"
+              />
+              <Select
+                allowClear
+                placeholder="请选择标签"
+                className="w-48"
+                options={tagOptions}
+                value={selectedTagId}
+                onChange={(v) => setSelectedTagId(v)}
+              />
+              <Select
+                allowClear
+                placeholder="请选择分类"
+                className="w-48"
+                options={categoryOptions}
+                value={selectedCategoryId}
+                onChange={(v) => setSelectedCategoryId(v)}
+              />
+              <Select
+                allowClear
+                placeholder="请选择状态"
+                className="w-40"
+                options={[
+                  { label: '已发布', value: 'published' },
+                  { label: '草稿', value: 'draft' },
+                  { label: '已删除', value: 'deleted' },
+                ]}
+                value={selectedStatus}
+                onChange={(v) => setSelectedStatus(v)}
               />
               <Space>
                 <Button
@@ -297,40 +421,20 @@ const ArticlesPage = () => {
                 </Button>
               </Space>
             </div>
-            <PermissionButton
-              color="primary"
-              variant="solid"
-              onClick={() =>
-                setEditModal({
-                  visible: true,
-                  data: null,
-                  isAdd: true,
-                })
-              }
-            >
+            {/* 确认时拦截，让别人预览一下 */}
+            <Button color="primary" variant="solid">
               新增
-            </PermissionButton>
+            </Button>
           </div>
           <Table<DataType>
             bordered
             loading={loading}
             columns={columns}
             dataSource={rows}
-            pagination={false}
             scroll={{ x: 'max-content', y: tableScrollY }}
           />
         </div>
       </Card>
-      <AddOrEditModal
-        open={editModal.visible}
-        title={editModal.isAdd ? '新增标签' : '编辑标签'}
-        initialName={editModal.data?.name}
-        loading={editLoading}
-        onOk={handleEditSubmit}
-        onCancel={() =>
-          setEditModal({ visible: false, data: null, isAdd: false })
-        }
-      />
     </div>
   )
 }

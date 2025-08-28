@@ -256,6 +256,7 @@ export const getArticles = (params?: {
   pageSize?: number
   search?: string
   categoryId?: number
+  tagId?: number
   status?: 'draft' | 'published' | 'deleted'
 }) =>
   http<Paginated<Article>>({
