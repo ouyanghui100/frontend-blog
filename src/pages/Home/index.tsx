@@ -17,12 +17,12 @@ export const countUpData = [
     count: 682,
     color: '#1890ff',
   },
-  {
-    title: '评论数',
-    icon: 'message',
-    count: 259,
-    color: '#fa541c',
-  },
+  // {
+  //   title: '评论数',
+  //   icon: 'message',
+  //   count: 259,
+  //   color: '#fa541c',
+  // },
   {
     title: '访问次数',
     icon: 'person',
