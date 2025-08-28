@@ -239,7 +239,7 @@ export const createArticle = (data: {
   title: string
   summary: string
   content: string
-  author: string
+  authorId: number
   category: string
   tags: string[]
   status: 'draft' | 'published' | 'deleted'
@@ -276,7 +276,7 @@ export const updateArticle = (data: {
   title?: string
   summary?: string
   content?: string
-  author?: string
+  authorId?: number
   category?: string
   tags?: string[]
   status?: 'draft' | 'published' | 'deleted'

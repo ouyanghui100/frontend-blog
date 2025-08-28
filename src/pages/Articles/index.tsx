@@ -173,14 +173,17 @@ const ArticlesPage = () => {
   const [selectedStatus, setSelectedStatus] = React.useState<
     StatusType | undefined
   >(undefined)
+  const [page, setPage] = React.useState<number>(1)
+  const [pageSize, setPageSize] = React.useState<number>(10)
+  const [total, setTotal] = React.useState<number>(0)
 
+  // 加载下拉框选项
   const [tagOptions, setTagOptions] = React.useState<
     Array<{ label: string; value: number }>
   >([])
   const [categoryOptions, setCategoryOptions] = React.useState<
     Array<{ label: string; value: number }>
   >([])
-
   const fetchFilters = React.useCallback(async () => {
     try {
       const [tags, categories] = await Promise.all([
@@ -200,45 +203,66 @@ const ArticlesPage = () => {
       // 错误提示已在 http 拦截器中统一处理
     }
   }, [])
+  React.useEffect(() => {
+    fetchFilters()
+  }, [fetchFilters])
 
-  const fetchData = React.useCallback(async () => {
-    try {
-      setLoading(true)
-      const res = await frontedBlogApi.getArticles({
-        search: searchText.trim() || undefined,
-        tagId: selectedTagId,
-        categoryId: selectedCategoryId,
-        status: selectedStatus,
-      })
-      const items = res?.items ?? []
-      const mapped: DataType[] = items.map((a) => ({
-        key: String(a.id),
-        title: a.title,
-        summary: a.summary,
-        author: a.author,
-        category: a.category,
-        tags: a.tags,
-        viewCount: a.viewCount,
-        isRecommend: a.isRecommend,
-        isFeatured: a.isFeatured,
-        status: a.status as StatusType,
-        createdAt: a.createdAt,
-        updatedAt: a.updatedAt ?? null,
-        publishedAt: a.publishedAt ?? null,
-      }))
-      setRows(mapped)
-    } catch {
-      // 错误提示已在 http 拦截器中统一处理
-    } finally {
-      setLoading(false)
-    }
-  }, [searchText, selectedTagId, selectedCategoryId, selectedStatus])
+  const fetchData = React.useCallback(
+    async (override?: { page?: number; pageSize?: number }) => {
+      try {
+        setLoading(true)
+        const usePage = override?.page ?? page
+        const usePageSize = override?.pageSize ?? pageSize
+        const res = await frontedBlogApi.getArticles({
+          search: searchText.trim() || undefined,
+          tagId: selectedTagId,
+          categoryId: selectedCategoryId,
+          status: selectedStatus,
+          page: usePage,
+          pageSize: usePageSize,
+        })
+        const items = res?.items ?? []
+        const mapped: DataType[] = items.map((a) => ({
+          key: String(a.id),
+          title: a.title,
+          summary: a.summary,
+          author: a.author,
+          category: a.category,
+          tags: a.tags,
+          viewCount: a.viewCount,
+          isRecommend: a.isRecommend,
+          isFeatured: a.isFeatured,
+          status: a.status as StatusType,
+          createdAt: a.createdAt,
+          updatedAt: a.updatedAt ?? null,
+          publishedAt: a.publishedAt ?? null,
+        }))
+        setRows(mapped)
+        setTotal(res?.total ?? 0)
+        setPage(res?.page ?? usePage)
+        setPageSize(res?.pageSize ?? usePageSize)
+      } catch {
+        // 错误提示已在 http 拦截器中统一处理
+      } finally {
+        setLoading(false)
+      }
+    },
+    [
+      searchText,
+      selectedTagId,
+      selectedCategoryId,
+      selectedStatus,
+      page,
+      pageSize,
+    ]
+  )
 
   // 搜索
   const [searchLoading, setSearchLoading] = React.useState<boolean>(false)
   const onSearch = React.useCallback(() => {
     setSearchLoading(true)
-    fetchData()
+    setPage(1)
+    fetchData({ page: 1 })
     setSearchLoading(false)
   }, [fetchData])
 
@@ -248,13 +272,9 @@ const ArticlesPage = () => {
     setSelectedTagId(undefined)
     setSelectedCategoryId(undefined)
     setSelectedStatus(undefined)
-    fetchData()
+    setPage(1)
+    fetchData({ page: 1 })
   }, [fetchData])
-
-  React.useEffect(() => {
-    fetchFilters()
-    fetchData()
-  }, [fetchFilters, fetchData])
   // #endregion
 
   // #region 编辑/新增
@@ -431,6 +451,18 @@ const ArticlesPage = () => {
             loading={loading}
             columns={columns}
             dataSource={rows}
+            pagination={{
+              current: page,
+              pageSize,
+              total,
+              showSizeChanger: true,
+              showQuickJumper: true,
+              onChange: (p, ps) => {
+                setPage(p)
+                setPageSize(ps)
+                fetchData({ page: p, pageSize: ps })
+              },
+            }}
             scroll={{ x: 'max-content', y: tableScrollY }}
           />
         </div>
