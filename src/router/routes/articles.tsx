@@ -8,7 +8,7 @@ const ArticlesRoute: RouteObject = {
   name: 'Articles',
   element: <LayoutGuard />,
   meta: {
-    title: '分类',
+    title: '文章',
     icon: 'articles',
     affix: true,
     orderNo: 4,
@@ -20,7 +20,7 @@ const ArticlesRoute: RouteObject = {
       name: 'ArticlesPage',
       element: LazyLoad(lazy(() => import('@/pages/Articles/'))),
       meta: {
-        title: '分类',
+        title: '文章',
         key: 'articles',
         icon: 'articles',
         orderNo: 4,
