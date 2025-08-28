@@ -10,9 +10,11 @@ import './index.scss'
 export const BasicLayout = () => {
   useTitle()
   const { Sider, Content } = Layout
-  const { state } = useLocation()
+  const location = useLocation()
+  const { state } = location
   const { key = 'key' } = state || {}
   const { collapsed } = useMenuStore()
+  const isImmersive = location.pathname === '/articles/new'
 
   return (
     <Layout
@@ -20,11 +22,13 @@ export const BasicLayout = () => {
         'layout_wrapper flex h-[100vh] w-full overflow-x-hidden'
       )}
     >
-      <Sider width={210} trigger={null} collapsed={collapsed}>
-        <LayoutMenu />
-      </Sider>
+      {!isImmersive && (
+        <Sider width={210} trigger={null} collapsed={collapsed}>
+          <LayoutMenu />
+        </Sider>
+      )}
       <Layout>
-        <LayoutHeader />
+        {!isImmersive && <LayoutHeader />}
         <Layout id="mainCont">
           <Content>
             <Outlet key={key} />

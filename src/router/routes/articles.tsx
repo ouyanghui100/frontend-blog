@@ -27,6 +27,18 @@ const ArticlesRoute: RouteObject = {
         hideMenu: true,
       },
     },
+    {
+      path: 'new',
+      name: 'ArticleCreate',
+      element: LazyLoad(
+        lazy(() => import('@/pages/Articles/components/CreateArticle'))
+      ),
+      meta: {
+        title: '新增文章',
+        key: 'articleCreate',
+        hideMenu: true,
+      },
+    },
   ],
 }
 

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Button,
   Card,
@@ -39,6 +40,7 @@ interface DataType {
 }
 
 const ArticlesPage = () => {
+  const navigate = useNavigate()
   // #region 表单结构
   const columns: TableProps<DataType>['columns'] = [
     {
@@ -404,6 +406,13 @@ const ArticlesPage = () => {
                 placeholder="请选择标签"
                 className="w-48"
                 options={tagOptions}
+                showSearch
+                optionFilterProp="label"
+                filterOption={(input, option) =>
+                  String(option?.label ?? '')
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
                 value={selectedTagId}
                 onChange={(v) => setSelectedTagId(v)}
               />
@@ -412,6 +421,13 @@ const ArticlesPage = () => {
                 placeholder="请选择分类"
                 className="w-48"
                 options={categoryOptions}
+                showSearch
+                optionFilterProp="label"
+                filterOption={(input, option) =>
+                  String(option?.label ?? '')
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
                 value={selectedCategoryId}
                 onChange={(v) => setSelectedCategoryId(v)}
               />
@@ -424,6 +440,13 @@ const ArticlesPage = () => {
                   { label: '草稿', value: 'draft' },
                   { label: '已删除', value: 'deleted' },
                 ]}
+                showSearch
+                optionFilterProp="label"
+                filterOption={(input, option) =>
+                  String(option?.label ?? '')
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
                 value={selectedStatus}
                 onChange={(v) => setSelectedStatus(v)}
               />
@@ -442,7 +465,11 @@ const ArticlesPage = () => {
               </Space>
             </div>
             {/* 确认时拦截，让别人预览一下 */}
-            <Button color="primary" variant="solid">
+            <Button
+              color="primary"
+              variant="solid"
+              onClick={() => navigate('/articles/new')}
+            >
               新增
             </Button>
           </div>
