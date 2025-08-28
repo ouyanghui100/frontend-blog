@@ -67,7 +67,7 @@ const CategoriesPage: React.FC = () => {
           <Popconfirm
             title={`确认删除分类【${record.name}】吗？`}
             onConfirm={() => handleDelete(Number(record.key))}
-            okButtonProps={deleteLoading}
+            okButtonProps={{ loading: deleteLoading }}
           >
             <PermissionButton color="danger" variant="text">
               删除

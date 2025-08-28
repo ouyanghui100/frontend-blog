@@ -3,7 +3,6 @@ import LazyLoad from '@/components/LazyLoad'
 import { LayoutGuard } from '../guard'
 import type { RouteObject } from '../types'
 
-// Home route
 const HomeRoute: RouteObject = {
   path: '/home',
   name: 'Home',

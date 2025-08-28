@@ -222,6 +222,9 @@ export interface Article {
   publishedAt?: string | null
   createdAt: string
   updatedAt?: string | null
+  viewCount: number
+  isFeatured: boolean
+  isRecommend: boolean
 }
 
 export interface Paginated<T> {
