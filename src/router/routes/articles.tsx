@@ -3,31 +3,31 @@ import LazyLoad from '@/components/LazyLoad'
 import { LayoutGuard } from '../guard'
 import type { RouteObject } from '../types'
 
-const CategoriesRoute: RouteObject = {
-  path: '/categories',
-  name: 'Categories',
+const ArticlesRoute: RouteObject = {
+  path: '/articles',
+  name: 'Articles',
   element: <LayoutGuard />,
   meta: {
     title: '分类',
-    icon: 'categories',
+    icon: 'articles',
     affix: true,
-    orderNo: 3,
+    orderNo: 4,
     hideChildrenInMenu: true,
   },
   children: [
     {
       path: '',
-      name: 'CategoriesPage',
-      element: LazyLoad(lazy(() => import('@/pages/Categories'))),
+      name: 'ArticlesPage',
+      element: LazyLoad(lazy(() => import('@/pages/Articles/'))),
       meta: {
         title: '分类',
-        key: 'categories',
-        icon: 'categories',
-        orderNo: 3,
+        key: 'articles',
+        icon: 'articles',
+        orderNo: 4,
         hideMenu: true,
       },
     },
   ],
 }
 
-export default CategoriesRoute
+export default ArticlesRoute

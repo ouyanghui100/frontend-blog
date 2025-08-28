@@ -3,7 +3,6 @@ import LazyLoad from '@/components/LazyLoad'
 import { LayoutGuard } from '../guard'
 import type { RouteObject } from '../types'
 
-// Home route
 const TagsRoute: RouteObject = {
   path: '/tags',
   name: 'Tags',
@@ -19,7 +18,7 @@ const TagsRoute: RouteObject = {
     {
       path: '',
       name: 'TagsPage',
-      element: LazyLoad(lazy(() => import('@/pages/Tags/index'))),
+      element: LazyLoad(lazy(() => import('@/pages/Tags'))),
       meta: {
         title: '标签',
         key: 'tags',
