@@ -28,7 +28,6 @@ interface DataType {
   author: string
   category: string
   tags: string[]
-  viewCount: number
   // 是否主动推荐
   isRecommend: boolean
   // 是否推荐
@@ -80,11 +79,6 @@ const ArticlesPage = () => {
           })}
         </>
       ),
-    },
-    {
-      title: '浏览次数',
-      dataIndex: 'viewCount',
-      key: 'viewCount',
     },
     {
       title: '主动推荐',
@@ -231,13 +225,12 @@ const ArticlesPage = () => {
           author: a.author,
           category: a.category,
           tags: a.tags,
-          viewCount: a.viewCount,
           isRecommend: a.isRecommend,
           isFeatured: a.isFeatured,
           status: a.status as StatusType,
           createdAt: a.createdAt,
-          updatedAt: a.updatedAt ?? null,
-          publishedAt: a.publishedAt ?? null,
+          updatedAt: a.updatedAt ?? '-',
+          publishedAt: a.publishedAt ?? '-',
         }))
         setRows(mapped)
         setTotal(res?.total ?? 0)
@@ -278,6 +271,11 @@ const ArticlesPage = () => {
     fetchData({ page: 1 })
   }, [fetchData])
   // #endregion
+
+  // 首次挂载时拉取一次数据（刷新页面也会触发）
+  React.useEffect(() => {
+    fetchData({ page: 1 })
+  }, [])
 
   // #region 编辑/新增
   // const [editModal, setEditModal] = React.useState<{

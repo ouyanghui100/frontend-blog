@@ -222,7 +222,6 @@ export interface Article {
   publishedAt?: string | null
   createdAt: string
   updatedAt?: string | null
-  viewCount: number
   isFeatured: boolean
   isRecommend: boolean
 }
@@ -240,7 +239,7 @@ export const createArticle = (data: {
   summary: string
   content: string
   authorId: number
-  category: string
+  categoryId: string
   tags: string[]
   status: 'draft' | 'published' | 'deleted'
   publishedAt?: string | null

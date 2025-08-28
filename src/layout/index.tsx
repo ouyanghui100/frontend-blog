@@ -28,7 +28,7 @@ export const BasicLayout = () => {
         </Sider>
       )}
       <Layout>
-        {!isImmersive && <LayoutHeader />}
+        <LayoutHeader />
         <Layout id="mainCont">
           <Content>
             <Outlet key={key} />

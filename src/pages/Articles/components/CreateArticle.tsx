@@ -2,6 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import MDEditor from '@uiw/react-md-editor'
 import { Button, Card, Form, Input, message, Select, Space } from 'antd'
+import dayjs from 'dayjs'
 import { frontedBlogApi } from '@/api'
 import type { Category, Tag as TagType } from '@/api/frontedBlogApi'
 import { PermissionButton } from '@/components/HOC/PermissionButton'
@@ -11,16 +12,17 @@ type StatusType = 'draft' | 'published' | 'deleted'
 
 const ArticleCreatePage: React.FC = () => {
   const { userInfo } = useUserStore()
+  console.log('userInfo:', userInfo)
   const [form] = Form.useForm()
   const navigate = useNavigate()
   const [saving, setSaving] = React.useState(false)
   const [content, setContent] = React.useState<string>('')
 
   const [tagOptions, setTagOptions] = React.useState<
-    Array<{ label: string; value: string }>
+    Array<{ label: string; value: number }>
   >([])
   const [categoryOptions, setCategoryOptions] = React.useState<
-    Array<{ label: string; value: string }>
+    Array<{ label: string; value: number }>
   >([])
 
   React.useEffect(() => {
@@ -31,12 +33,12 @@ const ArticleCreatePage: React.FC = () => {
           frontedBlogApi.getCategories(),
         ])
         setTagOptions(
-          (tags ?? []).map((t: TagType) => ({ label: t.name, value: t.name }))
+          (tags ?? []).map((t: TagType) => ({ label: t.name, value: t.id }))
         )
         setCategoryOptions(
           (categories ?? []).map((c: Category) => ({
             label: c.name,
-            value: c.name,
+            value: c.id,
           }))
         )
       } catch {
@@ -55,11 +57,13 @@ const ArticleCreatePage: React.FC = () => {
           summary: summary,
           content: content || '',
           authorId: userInfo?.id as number,
-          category: category,
+          categoryId: category,
           tags: tags ?? [],
           status,
           publishedAt:
-            status === 'published' ? new Date().toISOString() : undefined,
+            status === 'published'
+              ? dayjs().format('YYYY-MM-DD HH:mm:ss')
+              : undefined,
         })
         message.success(status === 'published' ? '发布成功' : '草稿已保存')
         // 清空并返回列表
@@ -125,7 +129,10 @@ const ArticleCreatePage: React.FC = () => {
                 options={categoryOptions}
               />
             </Form.Item>
-            <Form.Item name="tags">
+            <Form.Item
+              name="tags"
+              rules={[{ required: true, message: '请选择分类' }]}
+            >
               <Select
                 mode="tags"
                 placeholder="请选择标签"
@@ -144,7 +151,7 @@ const ArticleCreatePage: React.FC = () => {
             </Form.Item>
           </Form>
 
-          <div className="flex-1" data-color-mode="light">
+          <div className="min-h-0 flex-1" data-color-mode="light">
             <MDEditor
               value={content}
               onChange={(v) => setContent(v ?? '')}
