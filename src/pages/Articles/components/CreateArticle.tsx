@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import MDEditor from '@uiw/react-md-editor'
 import { Button, Card, Form, Input, message, Select, Space } from 'antd'
 import dayjs from 'dayjs'
@@ -12,7 +12,8 @@ type StatusType = 'draft' | 'published' | 'deleted'
 
 const ArticleCreatePage: React.FC = () => {
   const { userInfo } = useUserStore()
-  console.log('userInfo:', userInfo)
+  const location = useLocation() as { state?: { editId?: number } }
+  const editId = location?.state?.editId
   const [form] = Form.useForm()
   const navigate = useNavigate()
   const [saving, setSaving] = React.useState(false)
@@ -47,12 +48,37 @@ const ArticleCreatePage: React.FC = () => {
     })()
   }, [])
 
+  // 编辑模式：加载文章详情并填充
+  // 编辑模式：等 options 加载完成再回填
+  React.useEffect(() => {
+    if (!editId || categoryOptions.length === 0 || tagOptions.length === 0)
+      return
+    ;(async () => {
+      try {
+        const article = await frontedBlogApi.getArticleDetail(editId)
+        form.setFieldsValue({
+          title: article.title,
+          summary: article.summary,
+          category: categoryOptions.find((v) => v.label === article.category)
+            ?.value,
+          tags:
+            article.tags?.map(
+              (tag) => tagOptions.find((v) => v.label === tag)?.value
+            ) || [],
+        })
+        setContent(article.content)
+      } catch {
+        // 统一拦截
+      }
+    })()
+  }, [editId, form, categoryOptions, tagOptions])
+
   const submit = React.useCallback(
     async (status: StatusType) => {
       try {
         const { title, summary, category, tags } = await form.validateFields()
         setSaving(true)
-        await frontedBlogApi.createArticle({
+        const payload = {
           title: title,
           summary: summary,
           content: content || '',
@@ -64,8 +90,14 @@ const ArticleCreatePage: React.FC = () => {
             status === 'published'
               ? dayjs().format('YYYY-MM-DD HH:mm:ss')
               : undefined,
-        })
-        message.success(status === 'published' ? '发布成功' : '草稿已保存')
+        }
+        if (editId) {
+          await frontedBlogApi.updateArticle({ id: editId, ...payload })
+          message.success('文章更新成功')
+        } else {
+          await frontedBlogApi.createArticle(payload)
+          message.success(status === 'published' ? '发布成功' : '草稿已保存')
+        }
         // 清空并返回列表
         form.resetFields()
         setContent('')
@@ -76,7 +108,7 @@ const ArticleCreatePage: React.FC = () => {
         setSaving(false)
       }
     },
-    [content, form, navigate]
+    [content, form, navigate, editId, userInfo?.id]
   )
 
   const onCancel = React.useCallback(() => {

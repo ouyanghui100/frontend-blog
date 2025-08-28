@@ -4,6 +4,8 @@ import {
   Button,
   Card,
   Input,
+  message,
+  Popconfirm,
   Select,
   Space,
   Switch,
@@ -135,21 +137,34 @@ const ArticlesPage = () => {
       title: '操作',
       key: 'action',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      render: (_: any, _record: DataType) => (
+      render: (_: any, record: DataType) => (
         <Space size="middle">
           {/* 确认时拦截，让别人预览一下 */}
-          <Button color="primary" variant="text">
+          <Button
+            color="primary"
+            variant="text"
+            disabled={record.status === 'deleted'}
+            onClick={() =>
+              navigate('/articles/new', {
+                state: { editId: Number(record.key) },
+              })
+            }
+          >
             编辑
           </Button>
-          {/* <Popconfirm
-            title={`确认删除标签【${record.name}】吗？`}
+          <Popconfirm
+            title={'确认删除该文章吗？'}
             onConfirm={() => handleDelete(Number(record.key))}
             okButtonProps={{ loading: deleteLoading }}
-          > */}
-          <PermissionButton color="danger" variant="text">
-            删除
-          </PermissionButton>
-          {/* </Popconfirm> */}
+          >
+            <PermissionButton
+              color="danger"
+              variant="text"
+              disabled={record.status === 'deleted'}
+            >
+              删除
+            </PermissionButton>
+          </Popconfirm>
         </Space>
       ),
     },
@@ -275,7 +290,7 @@ const ArticlesPage = () => {
   // 首次挂载时拉取一次数据（刷新页面也会触发）
   React.useEffect(() => {
     fetchData({ page: 1 })
-  }, [])
+  }, [fetchData])
 
   // #region 编辑/新增
   // const [editModal, setEditModal] = React.useState<{
@@ -308,14 +323,19 @@ const ArticlesPage = () => {
   // #endregion
 
   // #region 删除
-  // const [deleteLoading, setDeleteLoading] = React.useState<boolean>(false)
-  // const handleDelete = async (id: number) => {
-  //   setDeleteLoading(true)
-  //   await frontedBlogApi.deleteTag({ id })
-  //   setDeleteLoading(false)
-  //   message.success('标签删除成功')
-  //   await fetchData()
-  // }
+  const [deleteLoading, setDeleteLoading] = React.useState<boolean>(false)
+  const handleDelete = async (id: number) => {
+    setDeleteLoading(true)
+    try {
+      await frontedBlogApi.deleteArticle({ id })
+      message.success('文章删除成功')
+      await fetchData({ page })
+    } catch {
+      // 统一拦截
+    } finally {
+      setDeleteLoading(false)
+    }
+  }
   // #endregion
 
   // #region 表格自适应滚动
