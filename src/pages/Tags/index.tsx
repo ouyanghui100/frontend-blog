@@ -58,22 +58,22 @@ const TagsPage: React.FC = () => {
       title: '是否流行',
       dataIndex: 'isPopular',
       key: 'isPopular',
-      // 不能这样 必须返回一个实际的 DOM 元素或者组件，而不是一个 Fragment。
-      // render: (isPopular: boolean) => (
-      //   <>
-      //     {isPopular ? (
-      //       <Tag color="success">是</Tag>
-      //     ) : (
-      //       <Tag color="processing">否</Tag>
-      //     )}
-      //   </>
-      // ),
-      render: (isPopular: boolean) =>
-        isPopular ? (
-          <Tag color="success">是</Tag>
-        ) : (
-          <Tag color="processing">否</Tag>
-        ),
+      // 等效
+      render: (isPopular: boolean) => (
+        <>
+          {isPopular ? (
+            <Tag color="success">是</Tag>
+          ) : (
+            <Tag color="processing">否</Tag>
+          )}
+        </>
+      ),
+      // render: (isPopular: boolean) =>
+      //   isPopular ? (
+      //     <Tag color="success">是</Tag>
+      //   ) : (
+      //     <Tag color="processing">否</Tag>
+      //   ),
     },
     {
       title: '操作',
