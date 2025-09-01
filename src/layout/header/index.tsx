@@ -1,5 +1,5 @@
-import { Layout } from 'antd'
-import classNames from 'classnames'
+import { Layout, theme as antdTheme } from 'antd'
+// import classNames from 'classnames'
 import SvgIcon from '@/components/SvgIcon'
 import { useConfigStore } from '@/store/config'
 import Breadcrumb from './components/Breadcrumb'
@@ -9,13 +9,14 @@ import UserDropdown from './components/UserDropdown'
 const LayoutHeader = () => {
   const { Header } = Layout
   const { theme, setTheme } = useConfigStore()
+  const {
+    token: { colorBgContainer },
+  } = antdTheme.useToken()
 
   return (
     <Header
-      className={classNames('flex h-[48px] flex-col justify-between', {
-        '!bg-[#fff]': theme === 'light',
-        '!bg-[#001529]': theme === 'dark',
-      })}
+      className={'flex h-[48px] flex-col justify-between'}
+      style={{ backgroundColor: colorBgContainer, padding: 0 }}
     >
       <div className="flex h-full w-full items-center justify-between px-3 py-0">
         <div className="flex items-center">
