@@ -186,6 +186,7 @@ const ArticleCreatePage: React.FC = () => {
           <div className="min-h-0 flex-1" data-color-mode="light">
             <MDEditor
               value={content}
+              autoFocus
               onChange={(v) => setContent(v ?? '')}
               height={'100%'}
             />
