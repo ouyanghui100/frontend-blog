@@ -280,7 +280,7 @@ export const updateArticle = (data: {
   tags?: number[]
   isRecommend?: boolean
   status?: 'draft' | 'published' | 'deleted'
-  publishedAt?: string | null
+  updatedAt?: string | null
 }) =>
   http<Article>({
     url: '/api/v1/articles',

@@ -109,7 +109,7 @@ const ArticlesPage = () => {
                   (tag) => tagOptions.find((v) => v.label === tag)?.value
                 ) as number[]) || ([] as number[]),
               isRecommend: checked,
-              publishedAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+              updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
             })
           }}
         />
