@@ -16,34 +16,6 @@ export interface CountUpType {
   count: number
   color: string
 }
-
-export const countUpData = [
-  {
-    title: '文章数',
-    icon: 'document',
-    count: 682,
-    color: '#1890ff',
-  },
-  // {
-  //   title: '评论数',
-  //   icon: 'message',
-  //   count: 259,
-  //   color: '#fa541c',
-  // },
-  {
-    title: '访问次数',
-    icon: 'person',
-    count: 1262,
-    color: '#faad14',
-  },
-  {
-    title: '日志数',
-    icon: 'location',
-    count: 508,
-    color: '#13c2c2',
-  },
-]
-
 export const pieOptions: EChartsOption = {
   legend: {
     bottom: 0,
