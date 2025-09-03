@@ -78,6 +78,7 @@ const TagsPage: React.FC = () => {
     {
       title: '操作',
       key: 'action',
+      fixed: 'right',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       render: (_: any, record: DataType) => (
         <Space size="middle">
