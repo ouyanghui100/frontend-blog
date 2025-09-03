@@ -16,20 +16,20 @@ export interface CountUpType {
   count: number
   color: string
 }
-export const pieOptions: EChartsOption = {
+export const baseOptions: EChartsOption = {
   legend: {
     bottom: 0,
     data: ['推广渠道', '访问来源', '广告投放'],
   },
   tooltip: {
     trigger: 'item',
-    formatter: '{a} <br/>{b}: {c} ({d}%)',
+    // 去掉 {a}，不显示 series 的 name
+    formatter: '{b}: {c} ({d}%)',
   },
   series: [
     {
-      name: '来源构成',
       type: 'pie',
-      radius: ['40%', '70%'], // 环形饼图，去掉就是普通饼图
+      radius: ['40%', '70%'],
       center: ['50%', '45%'],
       avoidLabelOverlap: false,
       label: {
@@ -43,23 +43,17 @@ export const pieOptions: EChartsOption = {
         {
           value: 1920 + 1920 + 1920,
           name: '推广渠道',
-          itemStyle: {
-            color: '#1890ff',
-          },
+          itemStyle: { color: '#1890ff' },
         },
         {
           value: 1920 + 0 + 0 + 1920 + 1920,
           name: '访问来源',
-          itemStyle: {
-            color: '#722ed1',
-          },
+          itemStyle: { color: '#722ed1' },
         },
         {
           value: 920 * 5,
           name: '广告投放',
-          itemStyle: {
-            color: '#faad14',
-          },
+          itemStyle: { color: '#faad14' },
         },
       ],
     },
@@ -70,11 +64,28 @@ const HomePage: React.FC = () => {
   // #region 分类
   const [isCategoriesLoading, setIsCategoriesLoading] = React.useState(true)
   const [categoriesList, setCategoriesList] = React.useState<Category[]>([])
+  const [pieOptions, setPieOptions] = React.useState<EChartsOption>(baseOptions)
   const fetchCategories = async () => {
     try {
       setIsCategoriesLoading(true)
       const res = await frontedBlogApi.getCategories({})
       setCategoriesList(res || [])
+      const options: EChartsOption = {
+        ...baseOptions,
+        legend: { ...baseOptions.legend, data: res.map((i) => i.name) },
+        series: [
+          {
+            type: 'pie',
+            radius: ['40%', '70%'],
+            center: ['50%', '45%'],
+            avoidLabelOverlap: false,
+            label: { show: true, formatter: '{b}: {c}' },
+            labelLine: { show: true },
+            data: res.map((i) => ({ value: i.articleCount, name: i.name })), // 修正
+          },
+        ],
+      }
+      setPieOptions(options)
       setIsCategoriesLoading(false)
     } catch (error) {
       console.log(error)
