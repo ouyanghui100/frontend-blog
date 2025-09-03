@@ -40,3 +40,21 @@ export const enum StatusTypeEnum {
   '草稿' = 'draft',
   '已删除' = 'deleted',
 }
+
+export const SiteStatusType = {
+  文章数: 'articleCount',
+  访问次数: 'visitCount',
+  日志数: 'logCount',
+} as const
+
+export const ColorMap = {
+  文章数: '#1890ff',
+  访问次数: '#faad14',
+  日志数: '#13c2c2',
+} as const
+
+export const IconMap = {
+  文章数: 'document',
+  访问次数: 'person',
+  日志数: 'location',
+} as const

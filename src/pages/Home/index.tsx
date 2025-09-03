@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, Col, List, message, Row, Tooltip } from 'antd'
 import type { EChartsOption } from 'echarts'
-import { frontedBlogApi } from '@/api'
+import { ColorMap, frontedBlogApi, IconMap, SiteStatusType } from '@/api'
 import type { Category, Tag } from '@/api/frontedBlogApi'
 import ChartsCard from '@/components/ChartsCard'
 import { PermissionButton } from '@/components/HOC/PermissionButton'
@@ -9,6 +9,13 @@ import { PermissionButton } from '@/components/HOC/PermissionButton'
 import { messageBox } from '@/utils/messageBox'
 import AddOrEditModal from './components/AddOrEditModal'
 import CountUpCard from './components/CountUpCard'
+
+export interface CountUpType {
+  title: string
+  icon: string
+  count: number
+  color: string
+}
 
 export const countUpData = [
   {
@@ -88,14 +95,9 @@ export const pieOptions: EChartsOption = {
 }
 
 const HomePage: React.FC = () => {
-  // const { userInfo } = useUserStore()
+  // #region 分类
   const [isCategoriesLoading, setIsCategoriesLoading] = React.useState(true)
-  const [isTagsLoading, setIsTagsLoading] = React.useState(true)
-
   const [categoriesList, setCategoriesList] = React.useState<Category[]>([])
-  const [tagsList, setTagsList] = React.useState<Tag[]>([])
-
-  // 提取到组件作用域，供编辑/删除后调用
   const fetchCategories = async () => {
     try {
       setIsCategoriesLoading(true)
@@ -107,6 +109,11 @@ const HomePage: React.FC = () => {
       setIsCategoriesLoading(false)
     }
   }
+  // #endregion
+
+  // #region 标签
+  const [isTagsLoading, setIsTagsLoading] = React.useState(true)
+  const [tagsList, setTagsList] = React.useState<Tag[]>([])
   const fetchTags = async () => {
     try {
       setIsTagsLoading(true)
@@ -118,8 +125,36 @@ const HomePage: React.FC = () => {
       setIsTagsLoading(false)
     }
   }
+  // #endregion
+
+  // #region 网站相关统计
+  const [siteStatus, setSiteStatus] = React.useState<CountUpType[]>([])
+  const fetchSiteStats = async () => {
+    try {
+      const res = await frontedBlogApi.getSiteStats()
+      type SiteStatusTitle = keyof typeof SiteStatusType
+      type SiteStats = Record<string, number>
+      const list = (Object.keys(SiteStatusType) as SiteStatusTitle[]).map(
+        (title) => {
+          const key = SiteStatusType[title]
+          return {
+            title,
+            icon: IconMap[title],
+            count: (res as unknown as SiteStats)[key] ?? 0,
+            color: ColorMap[title],
+          }
+        }
+      )
+
+      setSiteStatus(list)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  // #endregion
 
   React.useEffect(() => {
+    fetchSiteStats()
     fetchCategories()
     fetchTags()
   }, [])
@@ -205,7 +240,7 @@ const HomePage: React.FC = () => {
   return (
     <div className="flex h-full flex-col gap-3">
       <Row gutter={[12, 12]}>
-        {countUpData.map((item) => (
+        {siteStatus.map((item) => (
           <Col flex={1} key={item.title}>
             <CountUpCard
               title={item.title}

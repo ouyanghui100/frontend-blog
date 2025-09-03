@@ -39,6 +39,22 @@ export interface CategoryStatistics {
   totalArticles: number
 }
 
+// 站点统计类型（app 模块）
+export interface SiteStats {
+  articleCount: number
+  visitCount: number
+  logCount: number
+}
+
+// 日志类型（log 模块）
+export interface SiteLogItem {
+  id: number
+  title: string
+  content: string
+  createdAt: string
+  updatedAt?: string | null
+}
+
 // ========== 标签相关接口 ==========
 // 创建标签
 export const createTag = (data: { name: string; createdAt?: string }) =>
@@ -305,9 +321,9 @@ export const getArticlesByCategory = (
   }
 ) =>
   http<Paginated<Article>>({
-    url: `/api/v1/articles/by-category/{categoryId}`,
+    url: `/api/v1/articles/by-category/${categoryId}`,
     method: 'get',
-    params: { ...params, categoryId },
+    params,
   })
 
 export const getArticlesByTag = (
@@ -321,9 +337,9 @@ export const getArticlesByTag = (
   }
 ) =>
   http<Paginated<Article>>({
-    url: `/api/v1/articles/by-tag/{tagId}`,
+    url: `/api/v1/articles/by-tag/${tagId}`,
     method: 'get',
-    params: { ...params, tagId },
+    params,
   })
 
 // ========== 前台文章与统计接口 ==========
@@ -373,5 +389,86 @@ export const updateFrontendArticleView = (data: { id: number }) =>
 export const getFrontendCategoryStatistics = () =>
   http<Array<{ id: number; name: string; articleCount: number }>>({
     url: '/api/v1/frontend/categories/statistics',
+    method: 'get',
+  })
+
+// ========== app 模块 ==========
+export const getSiteStats = () =>
+  http<SiteStats>({
+    url: '/api/v1/site/stats',
+    method: 'get',
+  })
+
+// ========== visit 模块 ==========
+export const getVisitStats = () =>
+  http<{ visitCount: number; lastVisitedAt?: string | null }>({
+    url: '/api/v1/visit',
+    method: 'get',
+  })
+
+export const getFrontendVisitStats = () =>
+  http<{ visitCount: number; lastVisitedAt?: string | null }>({
+    url: '/api/v1/frontend/visit',
+    method: 'get',
+  })
+
+// ========== 日志（logs 模块，后台） ==========
+export const createLog = (data: {
+  title: string
+  content: string
+  createdAt?: string
+}) =>
+  http<SiteLogItem>({
+    url: '/api/v1/logs',
+    method: 'post',
+    data,
+  })
+
+export const getLogs = () =>
+  http<SiteLogItem[]>({
+    url: '/api/v1/logs',
+    method: 'get',
+  })
+
+export const getLogDetail = (id: number) =>
+  http<SiteLogItem>({
+    url: `/api/v1/logs/${id}`,
+    method: 'get',
+  })
+
+export const updateLog = (data: {
+  id: number
+  title?: string
+  content?: string
+  updatedAt?: string
+}) =>
+  http<SiteLogItem>({
+    url: '/api/v1/logs',
+    method: 'patch',
+    data,
+  })
+
+export const deleteLog = (data: { id: number }) =>
+  http<null>({
+    url: '/api/v1/logs',
+    method: 'delete',
+    data,
+  })
+
+// ========== 前台：日志分页与文章详情 ==========
+export const getFrontendLogs = (params?: {
+  page?: number
+  pageSize?: number
+  search?: string
+}) =>
+  http<Paginated<SiteLogItem>>({
+    url: '/api/v1/frontend/logs',
+    method: 'get',
+    params,
+  })
+
+export const getFrontendArticleDetail = (id: number) =>
+  http<Article>({
+    url: `/api/v1/frontend/${id}`,
     method: 'get',
   })
