@@ -1,4 +1,5 @@
 import { createHashRouter, Navigate, redirect } from 'react-router-dom'
+import ErrorBoundary from '@/components/ErrorBoundary'
 import PageException from '@/pages/Exception'
 import LoginPage from '@/pages/Login'
 import { getToken } from '@/utils/local'
@@ -22,7 +23,11 @@ Object.keys(metaRoutes).forEach((key) => {
 const rootRoutes: RouteObject[] = [
   {
     path: '/',
-    element: <NprogressProvider />,
+    element: (
+      <ErrorBoundary>
+        <NprogressProvider />
+      </ErrorBoundary>
+    ),
     // ToFix: 这样多了一层，看起来不优雅，后面找找看有没有更好的解法
     children: [
       {

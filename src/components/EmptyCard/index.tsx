@@ -9,10 +9,14 @@ interface propState {
 
 const EmptyCard: React.FC<propState> = ({ wordData, style, loading }) => {
   return (
-    <Card variant="borderless" loading={loading} style={style}>
+    <Card
+      variant="borderless"
+      loading={loading}
+      style={{ boxShadow: 'none', ...style }}
+    >
       <div className="flex items-center justify-center px-8 py-12">
         <div className="flex flex-col items-center justify-center">
-          <img src={noData} width="170" alt="暂无数据" />
+          <img src={noData} style={{ width: '170px' }} alt="暂无数据" />
           <span className="text-[#999]">{wordData || '暂无数据'}</span>
         </div>
       </div>
