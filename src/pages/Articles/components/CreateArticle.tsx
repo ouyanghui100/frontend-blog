@@ -28,23 +28,19 @@ const ArticleCreatePage: React.FC = () => {
 
   React.useEffect(() => {
     ;(async () => {
-      try {
-        const [tags, categories] = await Promise.all([
-          frontedBlogApi.getTags(),
-          frontedBlogApi.getCategories(),
-        ])
-        setTagOptions(
-          (tags ?? []).map((t: TagType) => ({ label: t.name, value: t.id }))
-        )
-        setCategoryOptions(
-          (categories ?? []).map((c: Category) => ({
-            label: c.name,
-            value: c.id,
-          }))
-        )
-      } catch {
-        // 统一拦截提示
-      }
+      const [tags, categories] = await Promise.all([
+        frontedBlogApi.getTags(),
+        frontedBlogApi.getCategories(),
+      ])
+      setTagOptions(
+        (tags ?? []).map((t: TagType) => ({ label: t.name, value: t.id }))
+      )
+      setCategoryOptions(
+        (categories ?? []).map((c: Category) => ({
+          label: c.name,
+          value: c.id,
+        }))
+      )
     })()
   }, [])
 

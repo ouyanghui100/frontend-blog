@@ -80,6 +80,7 @@ const LayoutMenu = () => {
 
   React.useEffect(() => {
     getMenuList()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   // #endregion
 

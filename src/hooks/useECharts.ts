@@ -24,6 +24,7 @@ export function useECharts(
     return () => {
       disposeCharts()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   React.useEffect(() => {
@@ -33,6 +34,7 @@ export function useECharts(
     return () => {
       disposeCharts()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, options])
 
   const initCharts = (t = theme) => {

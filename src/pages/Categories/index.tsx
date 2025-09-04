@@ -103,8 +103,8 @@ const CategoriesPage: React.FC = () => {
           search ? { search } : undefined
         )
         setRows((list ?? []).map(mapToRow))
-      } catch {
-        // 错误提示已在 http 拦截器中统一处理
+      } catch (e) {
+        console.log(e)
       } finally {
         setLoading(false)
       }

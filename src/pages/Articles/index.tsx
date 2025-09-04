@@ -318,6 +318,7 @@ const ArticlesPage = () => {
         ),
       },
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [categoryOptions, tagOptions]
   )
   // #endregion
@@ -325,6 +326,7 @@ const ArticlesPage = () => {
   // 首次挂载时拉取一次数据
   React.useEffect(() => {
     fetchData({ page: 1, pageSize })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // #region 删除

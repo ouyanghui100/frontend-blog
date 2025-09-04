@@ -86,9 +86,9 @@ const HomePage: React.FC = () => {
         ],
       }
       setPieOptions(options)
-      setIsCategoriesLoading(false)
     } catch (error) {
       console.log(error)
+    } finally {
       setIsCategoriesLoading(false)
     }
   }
