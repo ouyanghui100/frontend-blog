@@ -43,161 +43,6 @@ interface DataType {
 
 const ArticlesPage = () => {
   const navigate = useNavigate()
-  // #region 表单结构
-  const columns: TableProps<DataType>['columns'] = [
-    {
-      title: '名称',
-      dataIndex: 'title',
-      key: 'title',
-      fixed: 'left',
-    },
-    {
-      title: '摘要',
-      dataIndex: 'summary',
-      key: 'summary',
-    },
-    {
-      title: '作者',
-      dataIndex: 'author',
-      key: 'author',
-    },
-    {
-      title: '分类',
-      dataIndex: 'category',
-      key: 'category',
-    },
-    {
-      title: '标签',
-      dataIndex: 'tags',
-      key: 'tags',
-      render: (tags: string[]) => (
-        <>
-          {tags.map((tag, idx) => {
-            const color = TAG_COLOR_LIST[idx % TAG_COLOR_LIST.length]
-            return (
-              <Tag color={color} key={`${tag}-${idx}`}>
-                {tag}
-              </Tag>
-            )
-          })}
-        </>
-      ),
-    },
-    {
-      title: '主动推荐',
-      dataIndex: 'isRecommend',
-      key: 'isRecommend',
-      render: (isRecommend: boolean, record) => (
-        <Switch
-          checked={!!isRecommend}
-          onChange={async (checked) => {
-            // 更新数据源中的对应行
-            const newData = rows.map((item) => {
-              if (item.key === record.key) {
-                return { ...item, isRecommend: checked }
-              }
-              return item
-            })
-            setRows(newData)
-            await frontedBlogApi.updateArticle({
-              ...record,
-              id: Number(record.key),
-              category: categoryOptions.find((v) => v.label === record.category)
-                ?.value,
-              tags:
-                (record.tags?.map(
-                  (tag) => tagOptions.find((v) => v.label === tag)?.value
-                ) as number[]) || ([] as number[]),
-              isRecommend: checked,
-              updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-            })
-          }}
-        />
-      ),
-    },
-    {
-      title: '是否推荐',
-      dataIndex: 'isFeatured',
-      key: 'isFeatured',
-      render: (isFeatured: boolean, record) =>
-        !!record.isRecommend || !!isFeatured ? (
-          <Tag color="success">是</Tag>
-        ) : (
-          <Tag color="error">否</Tag>
-        ),
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status: StatusType) => {
-        const labelMap: Record<StatusType, string> = {
-          published: '已发布',
-          draft: '草稿',
-          deleted: '已删除',
-        }
-        const color =
-          status === StatusTypeEnum['已发布']
-            ? 'success'
-            : status === StatusTypeEnum['草稿']
-              ? 'processing'
-              : 'error'
-        return <Tag color={color}>{labelMap[status]}</Tag>
-      },
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-    },
-    {
-      title: '更新时间',
-      dataIndex: 'updatedAt',
-      key: 'updatedAt',
-    },
-    {
-      title: '发布时间',
-      dataIndex: 'publishedAt',
-      key: 'publishedAt',
-    },
-    {
-      title: '操作',
-      key: 'action',
-      fixed: 'right',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      render: (_: any, record: DataType) => (
-        <Space size="middle">
-          {/* 确认时拦截，让别人预览一下 */}
-          <Button
-            color="primary"
-            variant="text"
-            disabled={record.status === 'deleted'}
-            onClick={() =>
-              navigate('/articles/new', {
-                state: { editId: Number(record.key) },
-              })
-            }
-          >
-            编辑
-          </Button>
-          <Popconfirm
-            title={'确认删除该文章吗？'}
-            onConfirm={() => handleDelete(Number(record.key))}
-            okButtonProps={{ loading: deleteLoading }}
-          >
-            <PermissionButton
-              color="danger"
-              variant="text"
-              disabled={record.status === 'deleted'}
-            >
-              删除
-            </PermissionButton>
-          </Popconfirm>
-        </Space>
-      ),
-    },
-  ]
-  // #endregion
 
   // #region 获取表格数据 & 筛选
   const [loading, setLoading] = React.useState(false)
@@ -223,8 +68,8 @@ const ArticlesPage = () => {
   const [categoryOptions, setCategoryOptions] = React.useState<
     Array<{ label: string; value: number }>
   >([])
-  const fetchFilters = React.useCallback(async () => {
-    try {
+  React.useEffect(() => {
+    const fetchFilters = async () => {
       const [tags, categories] = await Promise.all([
         frontedBlogApi.getTags(),
         frontedBlogApi.getCategories(),
@@ -238,13 +83,10 @@ const ArticlesPage = () => {
           value: c.id,
         }))
       )
-    } catch {
-      // 错误提示已在 http 拦截器中统一处理
     }
-  }, [])
-  React.useEffect(() => {
+
     fetchFilters()
-  }, [fetchFilters])
+  }, [])
 
   const fetchData = React.useCallback(
     async (params?: {
@@ -295,10 +137,10 @@ const ArticlesPage = () => {
 
   // 搜索
   const [searchLoading, setSearchLoading] = React.useState<boolean>(false)
-  const onSearch = React.useCallback(() => {
+  const onSearch = async () => {
     setSearchLoading(true)
     setPage(1)
-    fetchData({
+    await fetchData({
       page: 1,
       pageSize,
       search: searchText.trim() || undefined,
@@ -307,53 +149,183 @@ const ArticlesPage = () => {
       status: selectedStatus,
     })
     setSearchLoading(false)
-  }, [searchText, selectedTagId, selectedCategoryId, selectedStatus, pageSize])
+  }
 
   // 重置
-  const onReset = React.useCallback(() => {
+  const onReset = async () => {
     setSearchText('')
     setSelectedTagId(undefined)
     setSelectedCategoryId(undefined)
     setSelectedStatus(undefined)
     setPage(1)
-    fetchData({ page: 1, pageSize })
-  }, [pageSize])
+    await fetchData({ page: 1, pageSize })
+  }
+  // #endregion
+
+  // #region 表单结构
+  const columns = React.useMemo<TableProps<DataType>['columns']>(
+    () => [
+      {
+        title: '名称',
+        dataIndex: 'title',
+        key: 'title',
+        fixed: 'left',
+      },
+      {
+        title: '摘要',
+        dataIndex: 'summary',
+        key: 'summary',
+      },
+      {
+        title: '作者',
+        dataIndex: 'author',
+        key: 'author',
+      },
+      {
+        title: '分类',
+        dataIndex: 'category',
+        key: 'category',
+      },
+      {
+        title: '标签',
+        dataIndex: 'tags',
+        key: 'tags',
+        render: (tags: string[]) => (
+          <>
+            {tags.map((tag, idx) => {
+              const color = TAG_COLOR_LIST[idx % TAG_COLOR_LIST.length]
+              return (
+                <Tag color={color} key={`${tag}-${idx}`}>
+                  {tag}
+                </Tag>
+              )
+            })}
+          </>
+        ),
+      },
+      {
+        title: '主动推荐',
+        dataIndex: 'isRecommend',
+        key: 'isRecommend',
+        render: (isRecommend: boolean, record) => (
+          <Switch
+            checked={!!isRecommend}
+            onChange={async (checked) => {
+              // 更新数据源中的对应行
+              const newData = rows.map((item) => {
+                if (item.key === record.key) {
+                  return { ...item, isRecommend: checked }
+                }
+                return item
+              })
+              setRows(newData)
+              await frontedBlogApi.updateArticle({
+                ...record,
+                id: Number(record.key),
+                category: categoryOptions.find(
+                  (v) => v.label === record.category
+                )?.value,
+                tags:
+                  (record.tags?.map(
+                    (tag) => tagOptions.find((v) => v.label === tag)?.value
+                  ) as number[]) || ([] as number[]),
+                isRecommend: checked,
+                updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+              })
+            }}
+          />
+        ),
+      },
+      {
+        title: '是否推荐',
+        dataIndex: 'isFeatured',
+        key: 'isFeatured',
+        render: (isFeatured: boolean, record) =>
+          !!record.isRecommend || !!isFeatured ? (
+            <Tag color="success">是</Tag>
+          ) : (
+            <Tag color="error">否</Tag>
+          ),
+      },
+      {
+        title: '状态',
+        dataIndex: 'status',
+        key: 'status',
+        render: (status: StatusType) => {
+          const labelMap: Record<StatusType, string> = {
+            published: '已发布',
+            draft: '草稿',
+            deleted: '已删除',
+          }
+          const color =
+            status === StatusTypeEnum['已发布']
+              ? 'success'
+              : status === StatusTypeEnum['草稿']
+                ? 'processing'
+                : 'error'
+          return <Tag color={color}>{labelMap[status]}</Tag>
+        },
+      },
+      {
+        title: '创建时间',
+        dataIndex: 'createdAt',
+        key: 'createdAt',
+      },
+      {
+        title: '更新时间',
+        dataIndex: 'updatedAt',
+        key: 'updatedAt',
+      },
+      {
+        title: '发布时间',
+        dataIndex: 'publishedAt',
+        key: 'publishedAt',
+      },
+      {
+        title: '操作',
+        key: 'action',
+        fixed: 'right',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        render: (_: any, record: DataType) => (
+          <Space size="middle">
+            {/* 确认时拦截，让别人预览一下 */}
+            <Button
+              color="primary"
+              variant="text"
+              disabled={record.status === 'deleted'}
+              onClick={() =>
+                navigate('/articles/new', {
+                  state: { editId: Number(record.key) },
+                })
+              }
+            >
+              编辑
+            </Button>
+            <Popconfirm
+              title={'确认删除该文章吗？'}
+              onConfirm={() => handleDelete(Number(record.key))}
+              okButtonProps={{ loading: deleteLoading }}
+            >
+              <PermissionButton
+                color="danger"
+                variant="text"
+                disabled={record.status === 'deleted'}
+              >
+                删除
+              </PermissionButton>
+            </Popconfirm>
+          </Space>
+        ),
+      },
+    ],
+    [categoryOptions, tagOptions]
+  )
   // #endregion
 
   // 首次挂载时拉取一次数据
   React.useEffect(() => {
     fetchData({ page: 1, pageSize })
   }, [])
-
-  // #region 编辑/新增
-  // const [editModal, setEditModal] = React.useState<{
-  //   visible: boolean
-  //   data: TagType | null
-  //   isAdd?: boolean
-  // }>({ visible: false, data: null, isAdd: false })
-  // const [editLoading, setEditLoading] = React.useState(false)
-
-  // 编辑/新增弹窗提交
-  // const handleEditSubmit = async (name: string) => {
-  //   setEditLoading(true)
-  //   try {
-  //     if (editModal.isAdd) {
-  //       await frontedBlogApi.createTag({ name })
-  //       message.success('标签新增成功')
-  //       fetchData()
-  //     } else {
-  //       await frontedBlogApi.updateTag({ id: editModal.data!.id, name })
-  //       message.success('标签编辑成功')
-  //       fetchData()
-  //     }
-  //     setEditModal({ visible: false, data: null, isAdd: false })
-  //   } catch (err) {
-  //     console.log(err)
-  //   } finally {
-  //     setEditLoading(false)
-  //   }
-  // }
-  // #endregion
 
   // #region 删除
   const [deleteLoading, setDeleteLoading] = React.useState<boolean>(false)
@@ -362,7 +334,13 @@ const ArticlesPage = () => {
     try {
       await frontedBlogApi.deleteArticle({ id })
       message.success('文章删除成功')
-      await fetchData({ page })
+      await fetchData({
+        page,
+        search: searchText.trim() || undefined,
+        tagId: selectedTagId,
+        categoryId: selectedCategoryId,
+        status: selectedStatus,
+      })
     } catch {
       // 统一拦截
     } finally {
@@ -449,7 +427,6 @@ const ArticlesPage = () => {
                 allowClear
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                onPressEnter={onSearch}
                 className="max-w-72"
               />
               <Select
