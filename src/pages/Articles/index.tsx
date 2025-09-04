@@ -247,16 +247,23 @@ const ArticlesPage = () => {
   }, [fetchFilters])
 
   const fetchData = React.useCallback(
-    async (override?: { page?: number; pageSize?: number }) => {
+    async (params?: {
+      page?: number
+      pageSize?: number
+      search?: string
+      tagId?: number
+      categoryId?: number
+      status?: StatusType
+    }) => {
       try {
         setLoading(true)
-        const usePage = override?.page ?? page
-        const usePageSize = override?.pageSize ?? pageSize
+        const usePage = params?.page ?? page
+        const usePageSize = params?.pageSize ?? pageSize
         const res = await frontedBlogApi.getArticles({
-          search: searchText.trim() || undefined,
-          tagId: selectedTagId,
-          categoryId: selectedCategoryId,
-          status: selectedStatus,
+          search: params?.search,
+          tagId: params?.tagId,
+          categoryId: params?.categoryId,
+          status: params?.status,
           page: usePage,
           pageSize: usePageSize,
         })
@@ -279,20 +286,11 @@ const ArticlesPage = () => {
         setTotal(res?.total ?? 0)
         setPage(res?.page ?? usePage)
         setPageSize(res?.pageSize ?? usePageSize)
-      } catch {
-        // 错误提示已在 http 拦截器中统一处理
       } finally {
         setLoading(false)
       }
     },
-    [
-      searchText,
-      selectedTagId,
-      selectedCategoryId,
-      selectedStatus,
-      page,
-      pageSize,
-    ]
+    [page, pageSize]
   )
 
   // 搜索
@@ -300,9 +298,16 @@ const ArticlesPage = () => {
   const onSearch = React.useCallback(() => {
     setSearchLoading(true)
     setPage(1)
-    fetchData({ page: 1 })
+    fetchData({
+      page: 1,
+      pageSize,
+      search: searchText.trim() || undefined,
+      tagId: selectedTagId,
+      categoryId: selectedCategoryId,
+      status: selectedStatus,
+    })
     setSearchLoading(false)
-  }, [fetchData])
+  }, [searchText, selectedTagId, selectedCategoryId, selectedStatus, pageSize])
 
   // 重置
   const onReset = React.useCallback(() => {
@@ -311,14 +316,14 @@ const ArticlesPage = () => {
     setSelectedCategoryId(undefined)
     setSelectedStatus(undefined)
     setPage(1)
-    fetchData({ page: 1 })
-  }, [fetchData])
+    fetchData({ page: 1, pageSize })
+  }, [pageSize])
   // #endregion
 
-  // 首次挂载时拉取一次数据（刷新页面也会触发）
+  // 首次挂载时拉取一次数据
   React.useEffect(() => {
-    fetchData({ page: 1 })
-  }, [fetchData])
+    fetchData({ page: 1, pageSize })
+  }, [])
 
   // #region 编辑/新增
   // const [editModal, setEditModal] = React.useState<{
