@@ -74,6 +74,7 @@ const LoginPage: React.FC = () => {
     return () => {
       document.removeEventListener('keypress', handleKeyPress)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   // #endregion
 
