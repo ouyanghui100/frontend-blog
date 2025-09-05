@@ -273,7 +273,7 @@ const HomePage: React.FC = () => {
                     <List.Item>
                       <List.Item.Meta
                         avatar={
-                          <Tooltip title="文章总数">
+                          <Tooltip title="文章数">
                             <div className="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-black">
                               {item.articleCount}
                             </div>
@@ -281,8 +281,8 @@ const HomePage: React.FC = () => {
                         }
                         title={
                           <div className="flex items-center justify-between">
-                            <div>{item.name}</div>
-                            <div className="flex items-center gap-1">
+                            <div className="flex-1">{item.name}</div>
+                            <div className="flex w-[125px] shrink-0 items-center gap-1">
                               <PermissionButton
                                 color="primary"
                                 variant="text"
@@ -362,8 +362,8 @@ const HomePage: React.FC = () => {
                         }
                         title={
                           <div className="flex items-center justify-between">
-                            <div>{item.name}</div>
-                            <div className="flex items-center gap-1">
+                            <div className="flex-1">{item.name}</div>
+                            <div className="flex w-[125px] shrink-0 items-center gap-1">
                               <PermissionButton
                                 color="primary"
                                 variant="text"
